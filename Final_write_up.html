@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+			function change_pic(){
+				var e = document.getElementById("new_rec");
+				var name = e.options[e.selectedIndex].text;
+				var img = document.getElementById("new_rec_img");
+				img.src = "New_Recs_" + name.substring(2) + ".png";
+			}
+			function show(str){
+				var el = document.getElementById(str);
+				if (el.style.display === "none"){
+				el.style.display = "block";
+				} else {el.style.display = "none";}
+				}
+			function hide(els, t){
+				if (t.target.parentNode.className !== 'refnum'){
+					for(var i = 0; i <els.length; i++){
+						var el = document.getElementById(els[i]);
+						if (el.style.display === "block")
+							{el.style.display = "none";}
+					}
+				}
+			}
+		</script>
+		<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+	    tex2jax: {
+	      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+	      processEscapes: true
+	    }
+	  });
+	</script>
+
+	<script type="text/javascript"
+	    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+		<title>Revamping NFL Playoffs</title>
+		<link rel="stylesheet" href="Styles.css">
+	</head>
+	<body>
+		<div onclick = 'hide(["first"], event)' class = 'art'>
+		<h1>Revamping the NFL Playoff System</h1>
+		<br>
+		<div class = 	"section_head">
+			Summary
+		</div>
+		<br>
+		<div class = "abstract">
+			In the NFL, having more wins than a team doesn’t necessarily mean that you get a better playoff spot than them. And in cases where two teams have the same number of wins, tiebreakers can seem arbitrary and not very informative. Here, I set out to create a better metric for NFL team’s success in a season. I propose a model similar to the NCAA’s RPI based off of the circumstances surrounding a team’s wins as well as the team’s strength of schedule. After justifying and developing my model, I analyze two historical years to identify how this change would have altered past playoffs.
+		</div>
+		<br>
+		<div class = "section_head">
+			I. Introduction
+		</div>
+		<div class = "text">
+			Playoffs? You want to talk about playoffs? Vic Fangio, head coach of the Denver Broncos, sure does<a href = "https://www.cbssports.com/nfl/news/broncos-coach-vic-fangio-believes-nfl-should-get-rid-of-divisions-altogether-suggests-new-playoff-format/"><sup>1</sup></a>. Fangio has proposed a radical idea for the NFL: abolish divisions and forget the wild card. Everyone in each conferences plays each other once, and the top 6 teams make the playoffs. Fangio’s biggest problem is one that NFL fans have grumbled about for a long time: a worse team hosting a better team in the wild card. This year, this manifested as the 9-7 Eagles (4th seed) hosting the 11-5 Seahawks (5th seed). The 6th seeded Vikings at 10-6 boasted a better record than the Eagles. Under Fangio’s proposed system, we would rearrange the NFC playoffs like this:
+		</div>
+		<img class = "center" src = "Vangio_2020.png" alt = "Vangio's New Playoffs">
+		<div class = "text">
+					<br>
+			Now on wildcard weekend, the Eagles travel to New Orleans and the Seahawks host the Vikings. Are these better matchups? If you’re a Saints fan, you’re probably happier. After losing to the Vikings in overtime, it seems likely that the Saints could have beaten a slightly worse opponent in the Eagles. Eagles fans meanwhile might be upset about having to travel, but home field advantage didn’t really help them anyway. Overall, I think this is a better playoff picture. Teams are better rewarded for their season: the Saints get an easier matchup and the Seahawks get home field advantage, while the Eagles just squeak in. 
+		</div>
+		<div class = "text">
+					<br>
+			Before we go and revamp the playoffs, we should see if this is really a problem. How often do teams have better records and worse seeds? The top four are automatically sorted by record, as are the bottom two, so we just need to look at the wild card teams vs. the division winners. Here’s every wild card team since 2002 when the NFL last updated its playoff structure.
+		<br><br>
+		</div>
+		<center>
+		<div class='tableauPlaceholder' id='viz1589907383237' style='position: relative'><noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;K8&#47;K82WZ67HN&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='path' value='shared&#47;K82WZ67HN' /> <param name='toolbar' value='top' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;K8&#47;K82WZ67HN&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1589907383237');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='85%';vizElement.style.height='827px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+		</center>
+				<div class = "caption">
+			Logos obtained from <a href = "https://www.sportslogos.net/">sportslogos.net</a>. <a href = "#disclaimer"> See note about logo usage.</a>
+		</div>
+		<div class ="text">
+					<br>
+			You can click on any team above to focus on just your favorite. The color of the triangles indicates how angry each team’s fans should be. Blue means that team was fairly placed (ignoring tie breakers for now). Red means a wildcard team had a strictly better record than a division winner. Ties are counted as 0.5 wins. The darker the red, the more division teams the wildcard team bested. So, for example, the 2018 5th-seeded Chargers had a better record than 3 of the 4 division winners and still had to travel (and even play) on wildcard weekend. Thus, they show as 5/3. In total, 36 wildcard teams have been cheated out of a better spot since 2002. That’s 2 of the 4 wildcard teams per year, on average. The biggest losers are the Packers, Colts, Steelers, and Seahawks, who have bested at least one division winner in 12 of their collective 15 wildcard appearances. 
+		<br>
+		</div>
+		<div class = "text">
+			Let’s fix this. From now on, we take the top six teams. Using the standard division winner rules, this would look something like this:
+		</div>
+		<div class = "list">
+			1.	Take winner from each division, using tiebreakers as necessary<br>
+				2.	Take top two records from remaining teams, using tiebreakers as necessary<br>
+				3.	Order these six teams by record<br>
+		<br>
+		</div>	
+		<div class = "text">		
+		This still presents a problem. What if a team misses the playoffs despite being better than a division winner because they are worse than the two wildcards? This has happened before, most recently in 2015:
+		</div>
+		<img class = "center" src = "2015_Playoffs.png" alt = "2015 playoff table">
+		<div class = "caption">
+			Credit <a href = "https://www.pro-football-reference.com/years/2015/playoffs.htm">Pro Football Reference </a>
+				<br>
+		</div>
+		<div class = "text">
+			The 10-6 Jets missed the playoffs while the 9-7 Texans got in. To fix this, we can just take the top 6 teams from each conference. Now, the 2015 Jets get in and the Texans go home early. One of the potential problems with this is strength of schedule. If we are just taking the six best teams, then a team with a softer division gets a huge lead over a team with a more competitive one. To look at relative strength of a division, we can look at how many more wins each division gets compared to the average. On average, a division will have 32 wins (each team going 8-8). Here is how many more wins each division racked up for each year since 2002:
+		</div>
+		<img class = "center" src = "wins_over_500.png" alt = "wins over 500">
+		<div class = "text">
+					<br>
+			We see that the AFC East has more wins than the rest of the league. However, this doesn’t mean the AFC East is better than the rest of the league: the Patriots represent 221 (37%) of the AFC East’s 603 wins since 2002. On average, we would expect a team to win 144 games over this span (8 games per year). The Jets, Dolphins, and Bills all fall short of this mark at 129, 127, and 126, respectively. This suggests that the Patriots have a huge advantage by being in the East, a feeling that many people have expressed and analyzed over the years<sup><a href = "2.	https://www.washingtonpost.com/news/sports/wp/2016/09/12/the-patriots-biggest-advantage-the-afc-east-still-stinks/">2</a>,<a href = "3.	https://cbssportsradio.radio.com/articles/damon-amendolara-bad-afc-east-has-helped-patriots-win-super-bowls">3</a></sup>. For a little more context, here is how every team has fared in divisional games (playoffs excluded) since the 2002 expansion:
+		</div>
+		<img src = "div_wins.png" alt = "division wins" style = "display: block;margin-left: auto;margin-right: auto;margin-top: 10px;width: 65%;">
+		<div class = "center">
+					<br>
+			Clearly, some teams have played better in their division (NE, PIT, and IND) than others (CLE, WAS, DET). The question though, is this a result of an easy or hard division or simply a reflection of the quality of these teams? Patriots Insider Tom Curran thinks that it’s more a representation of how good or bad teams are overall, at least in the case of the Patriots <a href = "https://www.nbcsports.com/boston/patriots/patriots-win-same-rate-vs-rest-nfl-they-do-vs-afc-east"><sup>4</sup></a>. Others, like Neil Greenberg of the Washington Post <a href = "https://www.washingtonpost.com/sports/2019/05/28/patriots-have-nfls-easiest-schedule-third-year-row/"><sup>5</sup></a> argue that while better teams should be better, having a soft schedule doesn’t hurt, especially when a powerhouse like the Patriots or Steelers gets two games per year against teams that have tended to be bad like the Jets or the Browns. I tend to agree more with Greenberg; even if teams earn all of their divisional wins, winning the NFC South has definitely meant more than winning the AFC East in recent years. Additionally, strength of schedule is compiled every year, and inevitably one team has a far easier schedule than others. In 2019, both the Packers and Forty-Niners went 13-3, but the Packers had an average opponent win percentage of 0.483 while San Francisco faced teams that average 0.534. This corresponds to the 11th easiest and 5th hardest schedules, respectively.
+			<br><br>
+			This difference is small but not negligible; in 2019, the Packerse played the (3-13) Lions twice while the 49ers played the (9-7) Rams twice. If we replaced both of the Packers games against the Lions with two games against the Rams, we bring the Packers strength of schedule up to 0.534. In real life, the Packers took both games over the Lions; if they were to lose one of their games against the much better Rams, they would have dropped to third in the playoffs and played the Vikings on wildcard weekend while the Saints stayed home. This evidence is definitely anecdotal and speculative; the Packers may have beaten the Rams twice and nothing would have changed. Either way, I’m convinced a team’s schedule is important enough to be included in my playoff metric. 
+			<br><br>
+			So what’s the best way to account for a team’s schedule? Under Fangio’s proposed system<a href = "https://www.cbssports.com/nfl/news/broncos-coach-vic-fangio-believes-nfl-should-get-rid-of-divisions-altogether-suggests-new-playoff-format/"><sup>1</sup></a>, there’s nothing to worry about. Every team in a conference plays everyone else in their conference once, so records are directly comparable. It gets a little hazier if we include one cross-conference rivalry game or if the NFL decides it likes its current scheduling procedure. In these cases, I think the best bet is to look at the NCAA’s RPI. The RPI (Ratings Percentage Index) attempts to include opponents and home-field advantage in the ranking of teams. This allows for comparison against teams that haven’t played each other as well as rewarding more “challenging” wins. I also want to include a factor for scoring. I think it’s justified to say that a team winning 40-0 over team X is more likely to beat a team that beat team X 3-0 and thus should be ranked higher. And with only 16 regular season games, the extra data might help to differentiate comparable teams and avoid those annoying tiebreaker situations we saw earlier. Now, my metric (I'll simply call it Points) is something like this:
+		</div>
+		<div class = "center">
+			$$Points = w_1 * Win\%_{Adj.}+w_2 * Win\%_{Opp.} + w_3 * Win\%_{Opp.'s\ Opp.}$$
+		</div>
+		<div class = "text">
+			where $w_1$, $w_2$, and $w_3$ are weights for each of the variables. So how should all of these adjustments and weightings be defined? Let's start with win percentage.
+		</div>
+		<div class = "section_head">
+					<br>
+			II. Win Percentage
+		</div>
+		<div class = "text">
+			To start, we will say that a team gains points for winning and loses points for losing. Then, we will sum up all of the points and adjust it to be between 0 and 1. 
+			As previously mentioned, home and away need to be factored into wins. We also want to include the “quality” of the win, i.e. whether it was a blowout or a close game. First, let’s define our home-field advantage. In the NCAA uses 1.4X and 0.6X multiplies for home losses/road wins and home wins/road losses, respectively.<span class = "ref"><span onclick='show("first")' class = "refnum"><sup>Note</sup></span><span id = "first" class = "refbody" style = "display:none;"> In general. Hockey, for example, uses 1.2 and 0.8.</span></span> Rather than just take these at face value, let’s see how much more likely a team has been to win at home since 2002:
+
+		</div>
+		<img class = "center" src = "Win_perc.png" alt = "win%">
+		<div class = "text">
+			<br>
+			Since 2002, the home team has won, on average, 57% of the time (excluding playoffs). That means that we expect a team to win 4.6 of their home games per year and only 3.4 road games. These should each be worth the same number of points ($p$), so 
+				$$p=4.6*(1-x)$$
+				$$p=3.4*(1+x)$$
+
+			Setting these equal, we get x = 0.15. So if a team gets a win at home, they get 0.85 points, whereas if they get a win on the road they get 1.15 points. <br><br>
+			What about ties? Ties are pretty infrequent and thus shouldn’t affect our results too much, but for simplicity we’ll say ties are worth half as much as a win would be. Therefore, a home win gets you 0.475 points while a road win gets you 0.575 points. As a quick note, even with margin of victory adjustments (next secion), there is no way for a win of any kind to be worth less than a tie.
+
+		</div>
+		<div class = "section_head">
+			<br>
+			III. Margin of Victory
+		</div>
+		<div class = "text">
+			Next, we have to account for margin of victory. This gets complicated because a team winning by a certain margin doesn’t always mean the same thing about the game. For example, a team winning by double digits can be a blowout or a close game, depending on when those points were scored. If Team X leads Team Y by 17 with 1 minute left and Team Y gets a garbage time touchdown, that’s a 10 point margin of victory. If Team X leads Team Y by 3 with 1 minute left and returns a desperation toss up for a pick six, that’s still a 10 point margin of victory. In the first scenario, Team Y had virtually no chance of winning; in the second one play could have changed the outcome of the game. I initially started out by looking at a wide range of factors, from margin of victory to number of lead changes to largest lead/deficit to adjust the margin of victory. This analysis is available <a href = "Appendix.html">here</a> if you're interested. To move on, I have to spoil the results: average lead (AL) by itself serves as a good proxy for adjusted margin of victory. Average lead is exactly what it sounds like: if the eventual winner trails by 3 points for half of the game and leads by 3 for the other half, they would have an AL of 0. A game where one team jumps out from the beginning and crushes their opponent has a large AL, while a back and forth game has an AL near 0. Since AL is calculated from the winner's perspecitve, a comeback win may have an AL below 0. The lowest AL in my database was -15.6 when the <a href = "https://www.pro-football-reference.com/boxscores/200512040mia.htm">Bills blew a game against the Dolphins on 12/4/2005 </a>. Score after 1 quarter: 0-21. Final score: 24-23. The largest AL was 32.4 when the <a href = "https://www.pro-football-reference.com/boxscores/201409180atl.htm">Falcons blowout of the Buccaneers</a>, 56-14 on 9/18/2014.
+			<br><br>
+			So how do we apply AL to get an adjustment? ALs around or below 0 should result in a slight deduction – they could’ve gone the other way pretty easily. Games with large ALs should get a bonus, as they weren’t just wins, they were definitive wins. The AL curve for the 4,598 games from 2002-2019 with a winner looks like this:
+		</div>
+		<img class = "center" src = "Avg_AL.png" alt = "avg_AL">
+		<div class = "text">
+			<br>
+			This is a nice normal curve, so we can just use mean and standard deviation to adjust the weighting of games. Games in the middle shouldn’t be affected, as they are exactly what is expected, so we’ll say that games within 0.5 standard deviations of the mean are left as is. From there, anything down to -2 or up to +2 standard deviations will be on a linear gradient, and anything outside of that range will be capped at ±0.1. Here’s the same curve with our adjustments overlaid:  
+		</div>
+		<img class = "center" src = "AVG_AL_2.png" alt = "Overlaid Avg_AL">
+		<div class = "text">
+			<br>
+			A large portion of games (31%) are unaffected. By coincidence, the slopes of the two lines (0.0106 - full equations in <b>Section IV</b> below) are the same (this isn’t the case if you apply one standard deviation because of the differences in the minimum and maximum compared to the mean). Interestingly, the cutoff points line up pretty well with NFL scoring. For a 0 point adjustment, the lower cutoff is 2.41 and the upper is 8.70. Essentially, if you were up by at least a field goal for the majority of the game, you don’t get penalized. If you were up by more than one score, you get rewarded. Keep in mind that this is based off of the average lead, so while winning by 9 points might not be a lot in its own right, over the whole game, an average lead of 9 points means the game is likely not very close. Maximum points are obtained with an average lead of at least 18.2 (three scores) while the maximum deduction is obtained at an average lead of -7.0 or less (one TD). 
+			<br>
+			<br>
+			Ties will have their own average leads (not necessarily 0), but for simplicity, we can say ties are unaffected by MOV (which makes sense - there is no MOV). This may be something that is worth revisiting at some point, but with the infrequency of ties in the NFL, it won't really affect the results.
+			<br>
+
+		</div>
+		<div class = "section_head">
+			<a name = "pts">
+			<br>
+			IV. Putting Win Percentage Together
+		</div>
+		<div class = "text">
+			Now that we have the adjustments, we can figure out how to scale our numbers. We want to assign 0 to the worst possible season and 1 to the best possible. The worst case scenario for a team is going 0-16 for a grand total of 0 points. The best case scenario is winning all 16 games. This would be 8 homes games (1.15+0.1 = +1.25) and 8 road games (0.85+ 0.1 = +0.95) for a grand total of 17.1. Since points are earned linearly, we can just leave this sum as is (note also that it approximately follows total wins).<br>
+			$$Wins =\sum_{g \in Games} Pts_g$$
+			<center>where</center> <br>
+			$$Pts_g = \begin{cases}
+			1*HFA_{Adj.}+AL_{Adj.} & \text {Win}\\
+			0.5*HFA_{Adj.}+AL_{Adj.} & \text{Tie}\\
+			0 & \text{Lose}
+			\end{cases}$$ $$ HFA_{Adj.} = \begin{cases}
+			1.15 & \text{Away}\\ 
+			0.85 & \text{Home}
+			\end{cases} $$ $$ AL_{Adj.} = \begin{cases}
+			-0.1 & {AL \leq -7.01}\\
+			0.0106*AL-0.0921 & {-7.01 < AL \leq 2.41}\\
+			0 & {2.41 < AL \leq 8.70}\\
+			0.0106*AL-0.0256 & {8.70 < AL}\\
+			\end{cases}
+			$$
+			<br>
+		</div>
+		<div class = "section_head">
+		<br>
+			V. Opponents and Opponents’ Opponents
+		</div>
+		<div class = "text">
+			Now that we have our weighting for a team’s games, we can consider their opponents. We’ll start with opponents’ opponents, because it turns out to be incredibly easy. To see this, let’s look at how the NFL makes it schedule. Every team plays 16 games, with the games split as follows:
+			<ul>
+				<li>2 games against each team in your division (6 total)</li>
+				<li>1 game against each team in another division in your conference (4)</li>
+				<li>1 game against each team in another division not in your conference (4)</li>
+				<li>1 game against the same-rated team in the other two divisions in your conference (2)</li>
+			</ul>
+			This means that every team plays at least one team from each division in their conference and one division from the other conference. As a consequence, <b>every team in the NFL</b> is included in your opponents’ opponents. You can try it yourself on the following graph.
+
+		</div>
+		<img src = "OppsGraph.png" alt = "Opponents Graph" class = "center" style = "width:75%;">
+		<div class = "text">
+			<br>
+			Here's an example connecting the Houston Texans and the Arizona Cardinals. These teams are from different conferences and didn’t play each other in 2019. However, they both played the Atlanta Falcons. 
+			<br>
+		</div>
+		<img src = "Opps_2.png" alt = "Demonstration" class = "center" style = "width:75%;">
+		<div class = "text">
+			To find a connection for any two teams in an interactive version of this graph, <a href = "https://nfl-opponents.herokuapp.com/">go here</a>. If the website is down or you're interested in how I did this, you can find the github repository behind the dashboard (along with a Jupyter notebook version) <a href = "https://github.com/aefreeman/NFL_Project/tree/master">here</a>. An important note is that these connections are not necessarily unique (the Texans and Cardinals also connect via the Baltimore Ravens), but this code will always find one such path.
+			<br>
+			The takeaway from this is that a metric for the win percentage of your opponents' opponents would be meaningless as it would encompass every NFL game, regardless of what team was initially being analyzed. Therefore, we can reduce our points formula to the following:
+		</div>
+		<div class = "center">
+			$$Points = w_1 * Win\%_{Adj.}+w_2 * Win\%_{Opp.}$$
+		</div>
+		<div class = "text">
+			This just leaves opponents’ win percentage. This calculation is simple: it will just be the game-averaged winning percentage of all of your opponents in all of their games that were not against you. Why are we excluding adjustments for home field advantage and margin of victory? Since each team gets 8 home games and 8 away games, we can assume that the effect of home field advantage gets averaged out among your opponents. Additionally, it makes things a lot easier when we look at games between two of your opponents (more on that shortly). For margin of victory, we want to reward teams for doing well without them having to consider how it may affect other teams. Likewise, we don’t want to set up a scenario where one team can manipulate their playoff position by winning but only by a little. By excluding margin of victory in this step, we are preserving the integrity of the margin of victory adjustment and making it so that a team would never benefit from intentionally handicapping themselves.
+			<br>
+			<br>
+			Note that our metric has some redundancy built in: the teams in your division will play each other, meaning that your division will give you 6 wins and 6 losses no matter what (even in the case of ties). Similarly, anytime you played two teams that also played each other, you will get 1 win and 1 loss from their game. However, since 2002, this has happened exactly 75 times for each team for each season (out of the 240 games played by opponents not against you). This is also an artifact of the way the league designs its schedule. If you play two teams that play each other, it must be one of three cases:
+			<ol>
+				<li>Both teams are in the same division</li>
+				<li>One of the teams is in your division and the other is in a division that your division is paired with for the season</li>
+				<li>Both teams were the same placed team from different divisions the year prior and hence they also play each other</li>
+			</ol>
+			Because of the way that this is structured, you are guaranteed to have a set number of your opponents play each other. Therefore, the effects of the guaranteed win and loss have no effect on the overall metric. If we introduce other factors like home field and margin of victory, we can no longer make this claim. So, let’s keep it simple. Your opponents’ win percentage is just the number of games won by your opponents out of the 240 games they played against teams that weren’t you. This number has a minimum of 75 and a maximum out of 240-75 = 165 because of the redundancy of the metric, so we can set 75 games won to 0 and 165 to 1. So the overall metric becomes
+		</div>
+		<div class = "center">
+			$$Win\%_{Opp.} = \left(\sum Opponents'\ Wins\right)*\frac{1}{165-75} - 75*\frac{1}{165-75}$$
+		</div>
+		<div class = "text">
+			This counts your division twice (since you play each member twice), meaning that their games are “more important” than your other opponents. However, this is fair: if you play a 1-15 team twice, your opponents’ winning percentage should reflect this. It doesn’t necessarily matter that it is the same team; all that matter is how good your opponents were.
+			<br><br>
+			Now all that’s left to do is figure out the weighting of your win percentage vs. your opponents’. 
+		<br>
+		</div>
+		<div class = "section_head">
+		<br>
+			VI. Weightings
+		</div>
+		<div class = "text">
+			To decide the weighting, we have to decide what we think your opponents’ win percentage should mean. I think that win percentage should be able to push an (x,y) team out and an (x-1, y+1) team in. For instance, a 10-6 team that had a very hard schedule should be in over an 11-5 team with very weak opponents. In other words, opponent’s win percentage can make up one game. It shouldn’t, however, make up two games, all else being equal. There should be no way for an 8-8 team to knock out a 10-6 team, assuming similar win quality. Why this caveat? Because as set, a 12-4 team that obliterates teams in its 12 wins can edge out a 16-0 team that barely wins in all of its games. That may seem extreme, but remember that this is the most extreme scenario. This would look something like the 12-4 team winning by an average of 40 points and the 16-0 team coming back late in every game to win in OT. This likely won’t ever happen, but if it did, I would feel comfortable taking the 12-4 team. Either way, they’ll both make the playoffs. <br><br>
+			So if we can figure out the minimum distance between two teams separated by two wins, we can set it so that at most, win percentage makes their total points equivalent. Then we just give the tiebreaker to the team with the most outright wins. So how close can these two teams get? This turns out to be pretty simple. Assuming the same win quality in all wins, out two teams will be separated by at least 1.8 (two extra home wins) and at most 2.2 (two extra away wins). However, we don’t want our 8-8 team beating our 10-6 team, so we take the minimum and say win percentage can add a maximum of 1.8 games to your score. Now, we have our final equation:
+		</div>
+		<div class = "center">
+			$$Points = \sum_{g\in Games} Pts_g + 1.8*\left[\left(\sum Opponents'\ Wins\right)*\frac{1}{165-75} - 75*\frac{1}{165-75}\right]$$
+			<center> where $Pts_g$ is defined <a href = "#pts">above</a> and includes HFA and MOV.</center><br>
+		Fairly complicated to look at, but the logic behind this equation is straightforward, and the math will all be done by a computer. One downside to this equation is that looking at a team’s schedule doesn’t immediately tell you how that team did. However, looking at a schedule will still give you a general idea of the team’s success. Additionally, this new system simply becomes another number that can be listed with a team’s record and there’s no real reason that the NFL (or the channels broadcasting the NFL) couldn’t add it in. <br><br>
+		Now comes the fun part: testing our formula. 
+		<br>
+		</div>
+		<div class = "section_head">
+			<br>
+			VII. Testing
+		</div>
+		<div class = "text">
+			Here are the new standings for 2019 after applying our new metric.
+		</div>
+		<div class = "inp">
+			<select id = "new_rec" onchange = "change_pic()">
+					<option>2002</option>
+					<option>2003</option>
+					<option>2004</option>
+					<option>2005</option>
+					<option>2006</option>
+					<option>2007</option>
+					<option>2008</option>
+					<option>2009</option>
+					<option>2010</option>
+					<option>2011</option>
+					<option>2012</option>
+					<option>2013</option>
+					<option>2014</option>
+					<option>2015</option>
+					<option>2016</option>
+					<option>2017</option>
+					<option>2018</option>
+					<option selected="selected">2019</option>
+				</select>
+		</div>
+		<img src = "New_Recs_19.png" id = "new_rec_img" style = 
+			"display: block;
+  			margin-left: 8%;
+  			margin-right: 8%;
+  			width:84%;"
+
+  			>
+		</div>
+		<div class = "text">
+			For each conference, the left column is the original standings and the right column is the new ranking. The dotted line shows the 6 teams that get into the playoffs. You can use the dropdown above the image to explore other years. Below are some quick highlights from the new data.
+			<ol>
+				<li> Some divisions are no longer represented in the playoffs:
+				<center>
+					<table>
+						<tr>
+							<th>Year</th>
+							<th>Division</th>
+						</tr>
+						<tr>
+							<td>2002</td>
+							<td>AFC East</td>
+						</tr>
+						<tr>
+							<td>2003</td>
+							<td>AFC North</td>
+						</tr>
+						<tr>
+							<td>2008</td>
+							<td>AFC West</td>
+						</tr>
+						<tr>
+							<td>2010</td>
+							<td>NFC West</td>
+						</tr>
+						<tr>
+							<td>2011</td>
+							<td>AFC West</td>
+						</tr>
+						<tr>
+							<td>2013</td>
+							<td>NFC North</td>
+						</tr>
+						<tr>
+							<td>2014</td>
+							<td>NFC South</td>
+						</tr>
+						<tr>
+							<td>2015</td>
+							<td>AFC South</td>
+						</tr>
+						<tr>
+							<td>2016</td>
+							<td>AFC South</td>
+						</tr>
+						<tr>
+							<td>2019</td>
+							<td>NFC East</td>
+						</tr>
+					</table>
+					</center>
+					This may be disappointing for fans of those divisions, but it should promote overall better playoffs. It also achieves our goal of getting rid of worse teams being in the playoffs than at home. For instance, in 2019, we now take the Rams over the Eagles. Even though both teams were 9-7, the Eagles are no longer rewarded for just being in a different division.<br><br>
+				</li>
+				<li>
+					Three teams making the playoffs from the same division becomes slighly more common:
+					<center>
+					<table>
+						<tr>
+							<th>Year</th>
+							<th>Division</th>
+						</tr>
+						<tr>
+							<td>2007</td>
+							<td>AFC South</td>
+						</tr>
+						<tr>
+							<td>2007</td>
+							<td>NFC East</td>
+						</tr>
+						<tr>
+							<td>2010</td>
+							<td>NFC South</td>
+						</tr>
+						<tr>
+							<td>2011</td>
+							<td>AFC North</td>
+						</tr>
+						<tr>
+							<td>2013</td>
+							<td>AFC West</td>
+						</tr>
+						<tr>
+							<td>2013</td>
+							<td>NFC West</td>
+						</tr>
+						<tr>
+							<td>2014</td>
+							<td>AFC North</td>
+						</tr>
+						<tr>
+							<td>2016</td>
+							<td>AFC West</td>
+						</tr>
+						<tr>
+							<td>2017</td>
+							<td>NFC South</td>
+						</tr>
+						<tr>
+							<td>2019</td>
+							<td>NFC West</td>
+						</tr>
+					</table>
+					</center>
+					Under current NFL playoff rules, this has happened 7 times as opposed to 9 under my new metric. Again, this shows that divisions don’t mean as much as they do currently.<br><br>
+				</li>
+				<li>Summary statistics, by year:
+					<br><br>
+					<iframe src="Summary_table.htm" class = "frame"></iframe>
+					<iframe src="Sum_Table_2.htm" class = "frame"></iframe>
+					<br>
+					For the most part, changes in standings are relatively small (about 1.5 seeds for teams that do move), and about half of the league moves at least one spot. We can also see that winning 10 games doesn’t guarantee a playoff spot, but winning less than 8 guarantees you are out. <br><br>
+				</li>
+				<li>
+					The 2015 Jets make the playoffs now. This was one of the scenarios I highlighted earlier as not making sense, with the Jets being better than Texans but still being sent home. From the table above, in only four years did a better team (by raw wins) get knocked out while a worse team got in: 2004, 2006, 2007, and 2018. If we look at those years, we see that this is a result of conferences; the worse team that got in is in the opposite conference of the team that got knocked out. Excluding these scenarios, there are exactly 0 times where a team with a better record got knocked out in favor a team with a worse record. In that regard, mission success.<br><br>
+				</li>
+				<li>
+					Winning a division doesn’t guarantee you a home game anymore even if you do make the playoffs. This rewards teams for being good in the regular season even without winning their division. For example, the 2018 Chargers were tied with the Chiefs for best record in the AFC, but were relegated to the 5 seed because KC won the head to head tiebreaker. Now, the Chargers not only get home field for their first playoff game, they get a bye and HFA for the entire playoffs. This is a little weird, but definitely makes more sense than making them the 5 seed. The tiebreak brings us to our next point:<br><br>
+				</li>
+				<li>
+					Ties in actual record are now broken by the quality of wins and strength of schedule rather than head-to-head or conference win percentage. This is good for when teams don’t play each other and have no obvious comparisons, but can lead to weird results, like the KC-LAC result above. I do think that KC should get the better seed for having the same record and winning both head-to-head matchups, but the difference between 1 and 2 is marginal until the Conference Championship game. Additionally, there isn’t an easy fix to this situation, and I would much rather take the weird tiebreak scenarios than the problems we have under the current system. This is definitely something that could be examined later, but for now, I’m okay with it. In other scenarios, it makes it definitively more clear why one 9-7 team gets in over another. For example, why did Bills and Titans get in over the Ravens and Chargers in 2017? In real life, you can google it and find out that the Titans had the best conference win percentage, while the Bills got in on strength of victory (link: pro-football-reference.com/years/2017/index.htm). First, both of those are iffy tiebreakers. Second, a casual fan looking at records wouldn’t really know why this tiebreaker happened. You could add a note to explain, or you could just use my metric and see that the Ravens and Chargers had 8.91 and 8.88 points compared to the 8.41 and 8.29 of the Bills and Titans. While it may take a little to understand where these rankings come from, once they are understood, it makes it much easier to look at rankings and understand why they are the way they are. 
+				</li>
+			</ol>
+			<br><br>
+		</div>
+		<div class = "section_head">
+			VIII. Hypothetical Playoffs
+		</div>
+		<div class = "text">
+			To really understand what this model means, I’m going to look at the playoffs from two years: 2010 (the most volatile year) and 2019 (the most recent year). Now, in theory, this new ranking means games should be chalk picks. 1 should be a better team than 2 which should be better than 3 and so on. That’s not always how things go though, and for fun I decided to look at our new matchups and pick the winners based off of how the teams did that season and how well they actually played in that game, if applicable. What follows is less data-driven and more my own thoughts, with some stats to back up my picks. If you’re not interested, feel free to skip to the <a href = "#Conclusions">conclusions below</a>.<br><br>
+		</div>
+		<div class = "text">
+			<u>2010</u><br>
+			Here’s what the 2010 playoff bracket actually looked like (top) and our new bracket (bottom):
+		</div>
+		<img class = "bracket" src = "2010_Act_Playoffs.png" alt = "2010 actual">
+		<img class = "bracket" src = "2010_New_Playoffs.png" alt = "2010 new">
+		<div class = "text">
+			<br><br>
+			Here’s what happened in real life for reference:
+		</div>
+		<img class = "bracket" src = "2010_Act_Playoffs_Final.png" alt = "2010 actual final">
+		<div class = "text">
+			<br><br>
+			Right away, something jumps out: the eventual Super Bowl Champion Green Bay Packers didn’t even make the playoffs in the modified bracket. In reality, they got in at the 6 seed on the strength of victory tiebreaker. It’s a little weird to exclude the SB Champs, but I’m not going to question it. The Packers barely got in to begin with, and then made a great run. In my system, they barely miss out. It happens. Now let’s look at what I think would’ve happened under my system:
+			<br><br>
+			<b>Wild Card Weekend</b>
+			<br><br>
+			<u>Game 1: 3. Baltimore Ravens vs. 6. Kansas City Chiefs</u><br>
+			In reality, the Ravens won this game 30-7 on the road. Giving them home field just tilts it more in their favor. Ravens by a mile.
+			<br><br>
+			<u>Game 2: 4. New York Jets vs. 5. Indianapolis Colts</u><br>
+The Jets won this one on the road 17-16. It probably wouldn’t be as ugly as the Ravens-Chiefs game, but the Jets still take this one.<br><br>
+<u>Game 3: 3. Chicago Bears vs. 6 New York Giants</u><br>
+The Bears lost to the Giants on the road in week 4, 17-3. However, the Giants just slid into the playoffs after staving off the 6-10 Redskins, 17-14 in week 17. Meanwhile, the Bears have won 2 of their last 3 and they have home field advantage. On defense, the Bears have two Pro Bowlers in Brian Urlacher and Julius Peppers. And on special teams, the Bears have Devin Hester who had 3 return TDs and made the Pro Bowl as a kick returner. Even though the Bears lost earlier in the season, I think they bear down (no pun intended) and hold off the visiting Giants. <br><br>
+<u>Game 4: 4. Philadelphia Eagles vs. 5. Tampa Bay Buccaneers</u><br>
+First off, I kept noticing little bugs in my code and the Bucs and Giants kept flip-flopping places (notice the 0.06 that separates them). I had a nice paragraph written out for the Eagles vs. Giants that included the Miracle at the New Meadowlands which happened earlier in 2010. It's an incredible series of events, so I'm leaving it in here. In week 15, the Giants hosted the Eagles and <a href = "https://www.pro-football-reference.com/boxscores/201012190nyg.htm">led 31-10 with just over 8 minutes left in the game</a>. Then came a 21 point comeback and the <a href = "https://www.youtube.com/watch?v=cJPf4h9GZvg">Miracle at the New Meadowlands</a>, and the Eagles walked it off, 38-31. <br>
+Now to get back to this game. These teams didn't play each other this season. The Bucs have an impressive week 17 win against the Saints, but upon closer inspection, it may not be that great of a win. With 9 minutes left and down 7, the Saints pulled starting QB Drew Brees in favor of Chase Daniel. Why? No one could catch the Saints for their 5 seed, so they were only playing for a chance at the 1 spot. For that to happen, the Falcons needed to lose, and after 3 quarters (the Saints and Falcons played simultaneously), the Falcons were up 31-3. So while a win is a win, the Bucs win here probably gets an asterisk. At QB, the Eagles have Michael Vick, while the Buccs have Josh Freeman. The Eagles also have Shady McCoy and DeSean Jackson. The Buccs, meanwhile, have LeGarrette Blount and Mike Williams. On defense, the only Pro Bowler is the Eagles' Asante Samuel. These teams are pretty evenly matched in my eyes; whoever wins this probably loses their next game, but this one would be a fun one to watch. I think the Eagles Pro Bowl safety and home field advantage might be enough for them to pull it out. I wouldn't be surprised either way for this game, but I'm going to take the Eagles.<br><br>
+Here’s the bracket after Wildcard Weekend:
+</div>
+<img class = "bracket" src = "2010_New_Playoffs_1.png" alt = "2010 new_1">
+<div class = "text">
+<br><br>
+<b>Divisional Round</b>
+<br><br>
+<u>Game 5: 1. New England Patriots vs. 4. New York Jets</u><br>
+Again, taking my cues from history, the Jets move on after knocking off their AFC East rival.<br><br>
+<u>Game 6: 2. Pittsburgh Steelers vs. 3. Baltimore Ravens</u><br>
+This division matchup goes the way of the Steelers for the same reason the Jets beat the Patriots. Fun facts about the 2010 Steelers: Three different QBs won games (Ben Roethlisberger, Charlie Batch, and Dennis Dixon). Of the five players on the roster to throw a pass, Ben Roethlisberger had the second worst completion percentage but the second highest quarterback rating. The leader in both of those categories? Antwaan Randle-El, who went 2-2 for 42 yards and 2 TDs. Through Randle-El’s career, he would go 22 for 27 for 323 yards, 6 TDs, and 0 INTs, making him one of the best non-QB passers in NFL history. In fact, he holds the record for <a href = "https://www.pro-football-reference.com/friv/nonqb.htm">most TD passes by a WR</a> and is the only NFL WR to <a href = "https://en.wikipedia.org/wiki/Antwaan_Randle_El#Professional_career">throw a TD in the Super Bowl</a>. None of this is relevant to the analysis at hand, but I thought it was interesting and I had to put it somewhere. <br><br>
+<u>Game 7: 1. Atlanta Falcons vs. 4. Philadelphia Eagles</u><br>
+In reality, the Packers made the journey to Atlanta rather than to Philadelphia. There, they steamrolled the NFC favorites 48-21 thanks to a 28-point second quarter (with <a href = "https://www.pro-football-reference.com/boxscores/201101150atl.htm">14 of those points coming in the last 42 seconds of the half</a>).  This is compared to the 21-16 game the week prior when the Packers knocked off the Eagles. Throw in the week 6 31-17 Eagles over Falcons win, and I give the battle of the birds to Philadelphia. <br><br>
+<u>Game 8: 2. New Orleans Saints vs. 3. Chicago Bears</u><br>
+New Orleans comes into this game fresh off the bye they never got. In reality, they fell to the 4-seed Seahawks (who were 7-9), 41-36 in a road game during Wildcard Weekend. Then, Seattle went on the road and lost 24-35 to the Bears. Don’t let the final line deceive you; this one was over long before the final whistle. After 3 quarters, it was 28-3. <br><br>This would probably be an interesting game; 2010 was before Seattle’s 12th man started breaking records for volume, but the home-field advantage over the Saints definitely helped, as did the Bears home-field the subsequent week. My rating slightly favors the Saints (11.3 vs. 11.1), as does the location of this game and the Saints added rest. Side note: The Saints also would have been 12-4 instead of 11-5 had Garrett Hartley made a 29 year field goal in OT in week 4. That said, the way that the Bears handled the Seahawks tips this game the Bears way in my mind. Fun game to watch, with Chicago advancing to host the Eagles for the right to represent the NFC in the Super Bowl. <br><br>
+Here’s the updated bracket:
+</div>
+<img class = "bracket" src = "2010_New_Playoffs_2.png" alt = "2010_New_Playoffs_2">
+<div class = "text">
+	<br><br>
+	<b>Conference Championships</b><br><br>
+	<u>Game 9: 2. Pittsburgh Steelers vs. 4. New York Jets</u><br>
+	Pittsburgh wins 24-19 over the Jets in a game of two halves. The AFC side of this bracket was nice and easy.<br><br>
+	<u>Game 10: 3. Chicago Bears vs. 4. Philadelphia Eagles</u><br>
+	In the first round of the real bracket, the Eagles hosted the Packers, losing 21-16. The Bears then hosted the Packers for the NFC Championship game, falling 21-14. In week 12, the Bears hosted the Eagles, winning 31-26. Even though the Bears lost against the Packers, who entered with a worse record and rating than the Eagles, I think it makes sense to give this game to the Bears. The Packers pulled off a string of upsets; in a hypothetical case like this, it’s hard to justify choosing the upset, especially given the circumstances: the Bears have a better record and rating, they won head-to-head, and they have home field. I’m not going to say it wouldn’t be a close game, but the expectation is that Chicago wins this one.<br><br>
+Super Bowl XLV is set: the Pittsburgh Steelers will face the Chicago Bears in Arlington, Texas.
+</div>
+<img class = "bracket" src = "2010_New_Playoffs_3.png" alt = "2010_New_Playoffs_3">
+<div class = "text">
+	<br><br>
+	<b>Super Bowl XLV</b><br>
+	The Pittsburgh Steelers entered SB XLV as 3 point underdogs to the Green Bay Packers. After falling behind 21-3, the Steelers closed the gap but eventually lost, 31-25, not quite making up the spread. Is this their chance for redemption?<br><br>
+	The Bears split their two games against the Packers, both of which were at home. In the regular season, they won by 3; in the NFC Championship Game, they lost by 7. The playoff loss is obviously much more important, being two weeks removed from the Super Bowl. Additionally, the Bears came in as 3.5 point underdogs, despite being home in that game. At a neutral field, that difference probably increases, making the Bears bigger underdogs than the Steelers in terms of the Green Bay Packers. And given the actual games between the two teams and the Packers, I think the Steelers could pull out the win here. <br><br>
+	So there you have it: the Steelers tough defense, led by James Harrison and Troy Polamalu, leads them to a tough-fought Super Bowl win. MVP is likely Roethlisberger, but I could see a case for Polamalu, Harrison, or Mendenhall as well. <br><br>
+	How did our new model do against the real okayoffs? Aside from excluding the Super Bowl Champion Packers, I think it did pretty well. In the AFC, we fixed the seeding so that the top 4 teams moved on to the divisional round by getting rid of the bonus for winning a division. In the NFC, our bracket was changed up a significant amount because we excluded the 7-9 Seahawks and changed how we broke the three way tie for the 5 and 6 seeds. Overall, the bracket makes more sense. The 11-5 Saints should never have to travel to the 7-9 Seahawks. The 10-6 Chiefs shouldn't get a home game just because they were better than the rest of their division. Under our new playoff model, these problems are fixed.
+</div>
+<img class = "bracket" src = "2010_New_Playoffs_Final.png" alt = "2010_New_Playoffs_Final">
+<div class = "text">
+			<br><br>
+			<u>2019</u><br>
+			Like 2010, here are the original (top) and modified (bottom) brackets. 
+</div>
+<img class = "bracket" src = "2019_Act_Playoffs.png" alt = "2019_Act_Playoffs">
+<img class = "bracket" src = "2019_New_Playoffs.png" alt = "2019_New_Playoffs">
+<div class = "text">
+By coincidence, the AFC side of the bracket for 2019 also doesn't change. On the NFC side, we switch the 2 and the 3 seed. In reality, the 49ers, Packers, and Saints were all 13-3. The 49ers won out by head-to-head record against both teams, while the Packers claimed second by conference win percentage. Now, we don't need these tiebreakers and instead use quality of win and strength of schedule to decide that the 49ers can keep their spot but the Saints deserve the 2 seed. In the lower half of the NFC bracket, we drop the Eagles out and move everyone one seed up, including the 7-seeded Rams who now sneak into the last wildcard spot. For reference, here's what actually happened (and how the AFC is going to play out in our modified bracket):
+</div>
+<img class = "bracket" src = "2019_Act_Playoffs_Final.png" alt = "2019_Act_Playoffs_Final">
+<div class = "text">
+<b>Wild Card Weekend</b><br><br>
+<u>Game 1: 3. New England Patriots vs. 6. Tennessee Titans</u><br>
+The Titans run game drives through New England. Coincidentally, this was the first time that New England failed to <a href = "https://en.wikipedia.org/wiki/2019_New_England_Patriots_season">win a playoff game in a season since 2010</a>.<br><br>
+<u>Game 2: 4. Buffalo Bills vs. 5. Houston Texans</u><br>
+In reality, this game was played in Houston, not Buffalo. The game went to overtime, where Ka’imi Fairbairn put the Texans through on a field goal. Side note: Fairbairn’s <a href = "https://en.wikipedia.org/wiki/Ka'imi_Fairbairn">full name</a> has to be one of the longest names in NFL history. I couldn’t find anything definitive, but I did find <a href = "https://www.rollingstone.com/culture/culture-lists/first-and-unpronounceable-the-most-amazing-names-in-nfl-draft-history-28849/">these</a> <a href = "https://www.reddit.com/r/nfl/comments/6hcjz4/best_nfl_names/">lists</a> of other great NFL names. My personal favorite? <a href = "https://en.wikipedia.org/wiki/Ironhead_Gallon">Ironhead Gallon</a>. Anyways, back to the game. The Bills almost beat the Texans on the road; move this game to Buffalo and I think they pull it out in regulation. Bills win. <br><br>
+<u>Game 3: 3. Green Bay Packers vs. 6. Los Angeles Rams</u><br>
+The Packers enter this game on a five game win streak. The Rams, meanwhile, are 3-2 in their last five. One of those losses was a road game against the 49ers that came down to a last second FG. In the Divisional round (off a bye), the Packers beat the Seattle Seahawks at home, 28-23. The Rams, meanwhile, beat the Seahawks 28-12 at home (week 14) and lost 29-30 on the road (week 5). Off of the Seahawks comparison, I think the Rams have a slight advantage. Keep in mind, however, that the Packers have been hot and are at home. Both teams have Super Bowl-experienced QBs in Aaron Rodgers and Jared Goff, but Rodgers definitely dominates the conversation (at least for now – who knows what Goff will do). The Packers also have a better RB (Aaron Jones, averaging 4.6 yds/carry and 67.8 yds/game vs. Todd Gurley at 3.8 and 57.1, respectively). The Rams, however, have a stronger receiving corps in Woods, Cooks, and Kupp. On the other side of the ball, both teams have comparable takeaway numbers (27 for GB and 31 for LA), but LA gets more QB pressure (50 team sacks to 41). A big part of this is 2x DPOY Aaron Donald. In my mind, this comes down to the Packers offense vs. the Rams defense. So who breaks first? Ultimately, I think that the experience of Rodgers and the home-field advantage would be too much for the Rams to overcome. Green Bay advances.<br><br>
+<u>Game 4: 4. Seattle Seahawks vs. 5. Minnesota Vikings</u><br>
+Both of these teams won their respective wild card matches in reality: SEA won 17-9 in Philadelphia, while MIN traveled to New Orleans and stole a 26-20 OT win. To me, the Vikings win is much more impressive. The Vikings came in as 7.5 point underdogs (Seattle was projected to lose by 1). Fans (specifically those from New Orleans) will remember how this one ended: on a <a href = "https://www.youtube.com/watch?v=QzHtM0OIigU">non-call offensive pass interference</a>. Even still, the Vikings led this one for the entire second half (save 7 seconds) and showed that they were a solid team. Both teams lost the following week in close-but-not-that-close games. If the Vikings can travel to the Saints (the new number 2 seed) and knock them off, I see no reason they can’t handle the Seahawks. Minnesota wins.
+</div>
+<img class = "bracket" src = "2019_New_Playoffs_1.png" alt = "2019_New_Playoffs_1">
+<div class = "text">
+	<br><br>
+	<b>Divisional Round</b><br><br>
+	<u>Game 5. 1. Baltimore Ravens vs. 6. Tennessee Titans</u><br>
+	The Titans come into this game as 10 point underdogs, and stun the Ravens, 28-12.<br><br>
+	<u>Game 6. 2. Kansas City Chiefs vs. 4. Buffalo Bills</u><br>
+	Against the Texans in the actual divisional game, KC struggled early. But after going down 24-0, the Chiefs put up 41 unanswered points, eventually winning 51-31. The second quarter had this wild string of TDs:
+</div>
+<img class = "center" src = "Chiefs.png" alt = "chiefs">
+<div class = "text">
+Kelce would finish the day with 10 receptions for 134 yards and 3 TDs, one of the <a href = "https://www.pro-football-reference.com/play-index/pgl_finder.cgi?request=1&match=game&year_min=1950&year_max=2019&season_start=1&season_end=-1&pos%5B%5D=TE&is_starter=E&game_type=P&career_game_num_min=1&career_game_num_max=400&qb_start_num_min=1&qb_start_num_max=400&game_num_min=0&game_num_max=99&week_num_min=0&week_num_max=99&c5val=1.0&order_by=fantasy_points">most dominant performances by a TE in NFL playoff history</a>. As we saw in the wild card game, the Bills and Texans are pretty evenly matched, so I don’t think the Bills would be able to hold up to Mahomes and his high-powered offense. Maybe they keep it closer? Either way, Chiefs win.<br><br>
+<u>Game 7. 1. San Francisco 49ers vs. 5. Minnesota Vikings</u><br>
+Even with our bracket shuffled around, this game also happened in reality. 49ers win, 27-10.<br><br>
+<u>Game 8. 2. New Orleans Saints vs. 3. Green Bay Packers</u><br>
+This is a tough one to compare. Overlap in the Packers and Saints schedule is relatively sparse. The Packers lost to the 49ers on the road twice – 37-8 in week 12 and 37-20 in the Conference Championship. The Saints meanwhile, lost 48-46 at home in week 14 on a last second field goal. This would suggest that the Saints would probably win with home field advantage, but keep in mind that they also lost to the Texans with home field advantage. I’m favoring the Saints here, but I don’t really have a good justification for it. So, I’m going to turn to <a href = "https://projects.fivethirtyeight.com/complete-history-of-the-nfl/#gb">538’s ELO system</a> to see who they would pick:
+</div>
+<img class = "center" src = "538.png" alt = "538">
+<div class = "text">
+	The black line represents the Packers while the Gold is the Saints. 538’s system, which is actually based in stats, supports my gut instinct, and that’s good enough for me. Saints move on to face San Francisco.
+</div>
+<img class = "bracket" src = "2019_New_Playoffs_2.png" alt = "2019_New_Playoffs_2">
+<div class = "text">
+	<br><br>
+	<b>Conference Championships</b><br><br>
+	<u>Game 9. 2. Kansas City Chiefs vs. 6. Tennessee Titans</u><br>
+	Kansas City ends Tennessee’s string of upsets to claim the AFC title. Final score: 35-24.<br><br>
+	<u>Game 10. 1. San Francisco 49ers vs. 2. New Orleans Saints</u><br>
+	The 49ers dispatched of the Green Bay Packers, 37-20 in the actual NFC Championship game. They also traveled to New Orleans in week 14 and won 48-46. Though I think this game would be fun to watch, I don’t think the Saints would be able to stop the red-hot 49ers on the road. 49ers win, setting up Super Bowl LIV.
+</div>
+<img class = "bracket" src = "2019_New_Playoffs_3.png" alt = "2019_New_Playoffs_3">
+<div class = "text">
+	<br><br>
+	<b>Super Bowl LIV</b><br>
+	Despite the seeding changes in the NFC, the 49ers have still emerged victorious and will meet the Kansas City Chiefs in Miami. And of course, the Chiefs win, 31-20. SB MVP: Patrick Mahomes.<br><br>
+	These playoffs were a lot more similar to the real playoffs than the 2010 modified bracket. In the AFC, there were a lot of upsets, but the rankings still make sense. The Titans knocked off the Ravens, but there's no way to justify calling a 9-7 team better than a 14-2 team. In the NFC, I would much rather watch Packers-Rams than Eagles-Seahawks, so in that sense these playoffs were more fun. They were also more fair, I think, since the Rams get into the playoffs over the Eagles. While both teams were 9-7, the Eagles had a softer season than the Rams, who were stuck with both the 49ers and the Seahawks. In numbers, the Eagles' opponents won 116.5 games; the Rams' opponents won 136. Putting the Rams in makes more sense and leads to a better first round matchup.<br><br>
+</div>
+<img class = "bracket" src = "2019_New_Playoffs_Final.png" alt = "2019_New_Playoffs_Final">
+<div class = "section_head">
+	<a name = "Conclusions">
+	IX. Discussion and Conclusions
+</div>
+<div class = "text">
+<br>
+Overall, I would say that my new metric does everything I wanted it to do: it provides a better way to break ties, it does away with the 9-7 in, 10-6 out scenario, and it produces good playoff games, making it a viable replacement for the current NFL standings formula. Halfway through writing this, the NFL announced the inclusion of a seventh playoff team per conference. I think that while they are at it, they should fix how they decide who makes the playoffs, or at the very least change how they do rankings. I can understand the logic of maintaining a team from every division; it gives everyone something to play for and encourages regional fans to watch the playoffs. For instance, if three AFC East teams, three AFC West teams, and 1 AFC South team make the playoffs, I can’t really root for or against anyone if I’m an AFC North fan. Including someone from every division solves that problem. This is also probably why the NFL uses the wildcard system they have: it guarantees a regional home game for all 8 regions in the NFL. Under my system, you could have every single AFC game within 367 miles:
+Make your top four seeds the Colts, Browns, Steelers, and Bengals. Have your 1 and 2 seeds advance to the conference championship. Here’s a map of where games are:
+</div>
+<img src = "NFL_Map.png" alt = "NFL map" class = "center">
+<div class = "text">
+	Having at least one team per division host a game guarantees a geographic diversity of playoff games. That said, my metric never excludes more than one division, and doesn’t do that all that often either. Additionally, I think the NFL playoffs are popular enough that the replacement of a divisional guarantee for better matchups makes sense and wouldn’t significantly hurt the NFL’s bottom line. If you did want to include every division though, one option is to include a bonus (such as 0.5 games) for winning your division. That would give teams extra motivation to fight for top of the division.<br><br>
+Another benefit to this model is that teams are less likely to rest their starters in week 17: a 13-2 team can’t guarantee that an 11-4 team can’t catch them if they lose under my system. While I have no problem with teams resting starters in meaningless games (in fact, I think it’s a very smart play), I do have a problem with these games being meaningless to begin with. There are 16 games in a season (20 counting playoffs), and for one of them to be meaningless is a rather large percentage of the season. Under my system, this is less likely to happen.<br><br>
+There’s definitely room for improvement on this model. For instance, it doesn’t take into account margin of loss. If a team wins by 50 and loses by 1 on average, they’ll look the same as a team that wins by 50 and loses by 50 on average. That clearly doesn’t make sense, so maybe my model should include some sort of incentive for keeping the game close, i.e. a team can get up to 0.1 points for a loss in a very tight game. <br><br>
+Another thing that could be modified is the head-to-head tie breaker. If a team has a rating of 11.4 and another has a rating of 11.5, I want the 11.4 team in over the 11.5 if they have the head-to-head tiebreak. At that point, both teams are fairly comparable, but one has defeated the other, suggesting they are the true better team. Perhaps if two teams are within a certain margin of each other, a head-to-head factor could be introduced (of course factoring in MOV and home-field). This would probably have preserved the Packers 2010 Super Bowl win.<br><br>
+Finally, I think it's worth mentioning why I like my model over more complicated models like <a href = "https://fivethirtyeight.com/methodology/how-our-nfl-predictions-work/">538's ELO</a> that I mentioned earlier. First of all, my metric is simpler. Since it does everything that I want it to, it doesn't make sense to overcomplicate it with additional variables. This would also make the model easier to understand, which would help fans and also help teams to know what they need to do to make the playoffs in definite terms. However, I think that if ELO were implemented, it would be a perfectly good model to use to determine playoff teams.<br><br>
+Regardless of any adjustments that could be made, I set out to build a metric that makes for a better, fairer NFL playoff system, and I did that. Will the NFL adopt this model? Probably not. But we can always hope.<br><br>
+Comments, questions, or suggestions? <a href = "mailto: freeman.an@husky.neu.edu">Let me know</a>.<br><br>
+</div>
+<div class = "section_head">
+	X. References<br>
+</div>
+<div class = "text">
+1.	<a href = "https://www.cbssports.com/nfl/news/broncos-coach-vic-fangio-believes-nfl-should-get-rid-of-divisions-altogether-suggests-new-playoff-format/">https://www.cbssports.com/nfl/news/broncos-coach-vic-fangio-believes-nfl-should-get-rid-of-divisions-altogether-suggests-new-playoff-format/</a><br>
+2.	<a href = "https://www.washingtonpost.com/news/sports/wp/2016/09/12/the-patriots-biggest-advantage-the-afc-east-still-stinks/">https://www.washingtonpost.com/news/sports/wp/2016/09/12/the-patriots-biggest-advantage-the-afc-east-still-stinks/</a><br>
+3.	<a href = "https://cbssportsradio.radio.com/articles/damon-amendolara-bad-afc-east-has-helped-patriots-win-super-bowls">https://cbssportsradio.radio.com/articles/damon-amendolara-bad-afc-east-has-helped-patriots-win-super-bowls</a><br>
+4.	<a href = "https://www.nbcsports.com/boston/patriots/patriots-win-same-rate-vs-rest-nfl-they-do-vs-afc-east">https://www.nbcsports.com/boston/patriots/patriots-win-same-rate-vs-rest-nfl-they-do-vs-afc-east</a><br>
+5.	<a href = "https://www.washingtonpost.com/sports/2019/05/28/patriots-have-nfls-easiest-schedule-third-year-row/">https://www.washingtonpost.com/sports/2019/05/28/patriots-have-nfls-easiest-schedule-third-year-row/</a><br><br>
+
+
+
+
+
+		<div class = "disclaimer">
+					<br>
+			<a name = "disclaimer">
+			Disclaimer: I do not own any of the teams, leagues, or logos depicted within this site and cannot give permission for anyone to use them. All team and league information, sports logos,  and names contained within this site are properties of their respective leagues, teams, ownership groups and/or organizations. Logos are used under a fair use argument. All logos used are low resolution, which does not impact the economic viability of the logo for its respective owner. 
+			</a>
+		</div>
+	</div>
+
+
+	</body>
+</html>
