@@ -41,7 +41,7 @@
 			</ul>
 		Some of these factors may not be that useful, in which case we will remove them, but for now these seem to be a good way of capturing the quality of a football game: MOV and TS tell you how many points were scored and by whom; LC and AL serve as a proxy for the timing of the scoring (back-and-forth games vs. leading the whole way and garbage-time TDs vs. over by halftime); and LL and LT help define the extremes of the game. These justifications are more intuitive than anything, but we’ll get into some more logical justifications later. To start, let’s look at how these factors correlate with each other:
 		</div>
-		<img src = "Seaborn.png" alt = "Comp" class = "center">
+		<img src = "img/Seaborn.png" alt = "Comp" class = "center">
 		<div class = "text">
 			<br>
 			Here’s a more in depth analytical overview of each of our factors.<br>
@@ -61,7 +61,7 @@
 						<td>59<br> <a href = "https://www.pro-football-reference.com/boxscores/200910180nwe.htm">NE over TEN</a>, 59-0, 10/18/2009</td>
 						<td>11.72</td>
 						<td>9.20</td>
-						<td><img src = "MOV_Dist.png" alt = "MOV" class = "tbl"><br> <a href = "https://en.wikipedia.org/wiki/Skellam_distribution">Skellam Distribution</a></td>
+						<td><img src = "img/MOV_Dist.png" alt = "MOV" class = "tbl"><br> <a href = "https://en.wikipedia.org/wiki/Skellam_distribution">Skellam Distribution</a></td>
 					</tr>
 					<tr>
 						<td>AL</td>
@@ -69,7 +69,7 @@
 						<td>32.40<br><a href = "https://www.pro-football-reference.com/boxscores/201409180atl.htm">ATL over TB</a>, 56-14, 9/18/2014</td>
 						<td>5.56</td>
 						<td>6.29</td>
-						<td><img src = "AL_Dist.png" alt = "AL" class = "tbl"><br> <a href = "https://en.wikipedia.org/wiki/Normal_distribution">Normal Distribution</a></td>
+						<td><img src = "img/AL_Dist.png" alt = "AL" class = "tbl"><br> <a href = "https://en.wikipedia.org/wiki/Normal_distribution">Normal Distribution</a></td>
 					</tr>
 					<tr>
 						<td>LC</td>
@@ -77,7 +77,7 @@
 						<td>11<br><a href = "https://www.pro-football-reference.com/boxscores/201201010gnb.htm">GB over DET</a>, 45-41, 1/1/2012</td>
 						<td>1.07</td>
 						<td>1.36</td>
-						<td><img src = "LC_Dist.png" alt = "LC" class = "tbl"><br><a href = "https://en.wikipedia.org/wiki/Poisson_distribution">Poisson Distribution</a></td>
+						<td><img src = "img/LC_Dist.png" alt = "LC" class = "tbl"><br><a href = "https://en.wikipedia.org/wiki/Poisson_distribution">Poisson Distribution</a></td>
 					</tr>
 					<tr>
 						<td>LL</td>
@@ -85,7 +85,7 @@
 						<td>59<br>NE over TEN, 59-0, 10/18/2009</td>
 						<td>15.44</td>
 						<td>9.22</td>
-						<td><img src = "LL_Dist.png" alt = "LL" class = "tbl"><br><a href = "https://en.wikipedia.org/wiki/Skewness">Positive Skewed</a> Normal Distribution</td>
+						<td><img src = "img/LL_Dist.png" alt = "LL" class = "tbl"><br><a href = "https://en.wikipedia.org/wiki/Skewness">Positive Skewed</a> Normal Distribution</td>
 					</tr>
 					<tr>
 						<td>LT</td>
@@ -93,7 +93,7 @@
 						<td>25<br><a href = "https://www.pro-football-reference.com/boxscores/201410050oti.htm">CLE over TEN</a>, 29-28, 10/5/2014</td>
 						<td>3.42</td>
 						<td>4.49</td>
-						<td><img src = "LD_Dist.png" alt = "LT" class = "tbl"><br><a href = "https://en.wikipedia.org/wiki/Exponential_distribution">Exponential Distribution</a></td>
+						<td><img src = "img/LD_Dist.png" alt = "LT" class = "tbl"><br><a href = "https://en.wikipedia.org/wiki/Exponential_distribution">Exponential Distribution</a></td>
 					</tr>
 					<tr>
 						<td>TS</td>
@@ -101,7 +101,7 @@
 						<td>106<br><a href = "">CIN over CLE</a>, 58-48, 11/28/2004</td>
 						<td>44.10</td>
 						<td>14.11</td>
-						<td><img src = "TS_Dist.png" alt = "TS" class = "tbl"><br>Normal Distribution</td>
+						<td><img src = "img/TS_Dist.png" alt = "TS" class = "tbl"><br>Normal Distribution</td>
 					</tr>
 				</table>
 			</center>
@@ -163,7 +163,7 @@
 
 				</center>
 			These games have identical MOVs and, depending on timings, these games could potentially have similar ALs. However, game 1 is clearly a much closer game than game 2. Now take a look at the graph of AL vs. LC (this is a blown up version of the graph from the plots above):
-			<img src = "AL_Zoom.png" alt = "AL" style = "display: block;
+			<img src = "img/AL_Zoom.png" alt = "AL" style = "display: block;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
@@ -173,7 +173,7 @@ Now that we are just focusing on games with small ALs, we can focus on the impor
 Now it’s time to start applying the ideas as a formula.<br><br>
 To start, I want to do a weighted sum of each of these factors, where each factor tells me how different the game was from average. For AL and TS, this is easy: we already have normal curves, so we can simply use the z-score. For LL, we’ll normalize our data by taking the square root. This makes the distribution look like this:
 		</div>
-	<img src = "Mod_Dist_1.png" class = "center" alt = "dist">
+	<img src = "img/Mod_Dist_1.png" class = "center" alt = "dist">
 <div class = "text">
 	This looks a lot more normal, and also has the added benefit of reducing the importance of LL.<br><br>
 For LC and MOV, the mean and standard deviations are fairly close, suggesting that a Poisson distribution is a reasonable model to use. With the other three factors, we are going to use z-scores, so for our Poisson distributions, we will use a similar idea. <a href = "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2551472">This paper</a> defines what they call a Poisson z-score, which comes from <a href = "https://en.wikipedia.org/wiki/Variance-stabilizing_transformation">normalizing</a> a Poisson distribution to have a variance of approximately 1. It is defined as follows:
@@ -186,15 +186,15 @@ So, here is our current formula:<br>
 $$Adj.\ MOV = Z_{AL}+Z_{TS}+Z_{\sqrt{AL}}+PZ_{LC}+PZ_{MOV}$$
 We might need coefficients to weight these values, but for now we have a way to determine how far from normal a game was. Let’s look at our new distribution.
 </div>
-<img src = "MOV_2.png" alt = "MOV" class = "center">
+<img src = "img/MOV_2.png" alt = "MOV" class = "center">
 <div class = "text">
 	This is a pretty normal curve, but it’s still skewed a little. In fact, it looks relatively similar to the curve for AL by itself:
 </div>
-<img src = "AL_Dist_2.png" class = "center" alt = "AL">
+<img src = "img/AL_Dist_2.png" class = "center" alt = "AL">
 <div class = "text">
 <br>
 Now let’s consider coefficients. As it stands, a team would benefit from having a large number of lead changes, whereas those games are actually closer and should be further down. So instead of adding PZ<sub>LC</sub>, we’ll subtract it. We’ll also add a multiplier of 0.1. It’s not as important as the other factors, but is definitely still relevant. AL and MOV are both important, and so will be fully weighted. LL has already been shrunk by the square root, but still ranges from 0 to 15. This value is important, but is semi-redundant with AL and MOV, so we will actually remove it for simplicity. TS will be removed at this points; at this point I have decided that it’s not as important as these other factors and any weighting to it would need to be so small as to be trivial. Now we have a simpler formula that still lends itself to the slightly skewed distribution we had earlier:</div>
-<img src = "MOV_Dist_2.png" class = "center" alt = "MOV_2">
+<img src = "img/MOV_Dist_2.png" class = "center" alt = "MOV_2">
 <div class = "text">
 	This distribution looks almost bimodal, but I think that is more an artifact of the scoring situation we saw earlier, where some results are more common than others. Our values now range from -10 to 10, with a mean of -0.72 and standard deviation of 3.25. Every so often, you would want to recalculate means and standard deviations, but with 18 years of data, I’m going to take these values as fact for now, and convert to give us a formula for adjusted margin of victory:
 	$$Adj.\ MOV = \frac{AL-5.56}{6.29} + 2 \left(\sqrt{MOV}-\sqrt{11.72}\right)-0.1*2*\left(\sqrt{LC}-\sqrt{1.07}\right)$$
@@ -202,7 +202,7 @@ Now let’s consider coefficients. As it stands, a team would benefit from havin
 	<br><br>
 	Before we go on, let’s take another look at this as a whole: first off, the shape of the curve is pretty similar to the shape of the AL curve (but not MOV due to the fact that MOV is always positive). Second, this is a very nice equation, but it may be a little more than what we need for our purposes. Keep in mind that Adj. MOV is a small factor of the points given to a win. In fact, its 0.1 points <u>at most</u>. In addition, there’s a saying that I particularly enjoy, especially in the context of analytics: <a href = "https://en.wikipedia.org/wiki/KISS_principle">keep it simple, stupid</a>. So if we can reduce our model to one variable, it’s probably a good idea. Let’s look at the correlation of Adj.MOV to AL:
 </div>
-<img src = "AL_MOV.png" alt = "al_MOV" class = "center">
+<img src = "img/AL_MOV.png" alt = "al_MOV" class = "center">
 <div class = "text">
 	Clearly, Adj. MOV adds detail that is lost in AL alone. However, as a whole, I think AL works as a relatively good proxy, especially given how small of a factor our MOV variable is anyways. There’s a relatively strong correlation between the two (r<sup>2</sup>=0.75) and there aren’t any huge outliers where using one over the other will have drastically different results. In addition, sticking to one variable makes things easier to understand for teams and fans, which would make it more likely (note: I know that this model will never be implemented) to be implemented. Finally, it simplifies the work for me. If this project were for immediate release as a new NFL policy, maybe it would be worth delving further into these variables. For my own purposes, I think one factor is sufficient. So, I’m making the executive decision to reduce the Adj. MOV model to a single variable.
 <br><br>
