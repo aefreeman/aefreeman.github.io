@@ -12,6 +12,14 @@ from oauth2client.service_account import ServiceAccountCredentials
 from plotly.offline import plot
 from git import Repo
 
+"""
+To remove Aa from legend:
+    plotly.min.js
+    find x.tx
+    set it equal to ""
+"""
+
+
 def setup():
     REPO_DIR = r'C:\Users\Andrew\Documents\GitHub\aefreeman.github.io'
     spr_key = "1_58RHEKoNIKDze4SQeCFtnd7qsbLaQteoc0V8vYj_WQ"
@@ -28,12 +36,24 @@ def setup():
     teams = standings.col_values(1)[1:]
     no_teams = len(teams)
     repo = Repo(REPO_DIR)
-    return standings, four_q, quarter_bonus, final_qs, teams, no_teams, repo
+    template = open('HTML_Format.txt', 'r')
+    html_temp = template.read()
+    template.close()
+    
+    return standings, four_q, quarter_bonus, final_qs, teams, no_teams, repo, html_temp
 
 def generate_plot():
-    scores = standings.col_values(2)[1:]
-    plt = go.Bar(x = teams, y = scores)
-    fig = go.Figure(data = plt, layout = go.Layout())
+    new_scores = [float(x) for x in standings.col_values(2)[1:]]
+    s_scores = sorted(new_scores, reverse = True)[:3]
+    labs = [f'{x[0]} {x[1]} - {x[2]}' if x[0] == 'Quarter' else f'Quarter {x[1]} Bonus' if x[0] == 'Bonus' else f'Final Question {x[2]}' for x in questions[:counter]]
+    labs.insert(0, 'Game Start')
+    fig = go.Figure()
+    for i, team in enumerate(new_scores):
+        scores[i].append(team)
+        data_labs = [None for j in range(counter-1)] + [teams[i] if team in s_scores else None]
+        fig.add_trace(go.Scatter(x = labs,y =scores[i], name = teams[i],mode="lines+text", text = data_labs, textposition = "middle right"))
+    fig.update_layout(xaxis_type='category',
+                  width = 1050, xaxis_range = [-0.5, counter + (counter//10)+0.5])
     return fig
 
 def get_stats(TYPE, QTR, QUESTION):
@@ -54,16 +74,22 @@ def get_stats(TYPE, QTR, QUESTION):
         return f'{correct} {"people" if correct != 1 else "person"} ({100*correct/no_teams:.0f}%) got the previous question correct. The average wager was {np.mean(wagers):.2f}. The average points awarded was {np.mean(pts):.2f}'
 
 def update(TYPE, QTR, QUESTION):
+    print('...generating data')
     fig = generate_plot()
     words = get_stats(TYPE, QTR, QUESTION)
+    data = html_temp.replace('<Text here>', words)
     fig.write_image("img/fig1.png")
-    html = open('words.txt', 'w')
-    html.write(words)
+    print('...updating html')
+    html = open('Live_Tracker.html', 'w')
+    html.write(data)
     html.close()
     repo.index.add(files)
     repo.index.commit('Live Edits')
     origin = repo.remote('origin')
+    print('...pushing to github')
     origin.push()
+    print(f'...done! {TYPE} - {QTR} - {QUESTION}')
+    
     
         
     

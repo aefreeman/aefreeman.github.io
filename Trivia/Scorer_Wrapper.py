@@ -15,15 +15,25 @@ QUESTION = None
 if __name__ == "__main__":
     while True:
         if not TYPE:
-            Scorer.standings, Scorer.four_q, Scorer.quarter_bonus, Scorer.final_qs, Scorer.teams, Scorer.no_teams, Scorer.repo = Scorer.setup()
+            Scorer.standings, Scorer.four_q, Scorer.quarter_bonus, Scorer.final_qs, Scorer.teams, Scorer.no_teams, Scorer.repo, Scorer.html_temp = Scorer.setup()
             Scorer.files = ['Trivia/Live_Tracker.html',
-                           'Trivia/words.txt',
                            'Trivia/img/fig1.png']
+            Scorer.scores = [[0] for team in Scorer.teams]
+            Scorer.counter = 2
+            questions = [['Quarter', i//4+1,i%4+1] for i in range(16)]
+            bonuses = [4,9,14]
+            for q in bonuses:
+                questions.insert(q, ['Bonus',q//5+1,1])
+            questions.extend([['Final',1,1],['Final',1,2]])
+            Scorer.questions = questions
+            quest_order = iter(questions)
             print('Setup')
         else:
             Scorer.update(TYPE, QTR, QUESTION)
-        print("Enter TYPE, QTR, QUESTION, CTRL-C to exit. TYPE options: Quarter, Bonus, Final")
-        TYPE, QTR, QUESTION = sys.stdin.readline().split(',')
+            Scorer.counter += 1
+        print("Press enter when ready for the next question. Ctrl-c to kill")
+        sys.stdin.readline()
+        TYPE, QTR, QUESTION = next(quest_order)
         QTR = int(QTR)
         QUESTION = int(QUESTION)
         reload(Scorer)
