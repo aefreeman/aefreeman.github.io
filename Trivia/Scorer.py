@@ -21,10 +21,10 @@ To remove Aa from legend:
 
 
 def setup():
-    REPO_DIR = r'C:\Users\Andrew\Documents\GitHub\aefreeman.github.io'
+    REPO_DIR = r'/home/andrew/Documents/aefreeman.github.io'
     spr_key = "1_58RHEKoNIKDze4SQeCFtnd7qsbLaQteoc0V8vYj_WQ"
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('Credentials.json', scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name(r'/home/andrew/Documents/aefreeman.github.io/Trivia/Trivia_Credentials.json', scope)
     client = gspread.authorize(creds)
     
     sheet = client.open_by_key(spr_key)
