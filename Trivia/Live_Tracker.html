@@ -1,8 +1,19 @@
 <!DOCTYPE html>
         <html>
+        <head>
+  <link rel="stylesheet" href="styles.css">
+</head>
         <body>
-        <div>3 people (38%) got question 1-2 correct.</div>
+        <h1 id = "title"></h1>
+        <script>
+        n =  new Date();
+        y = n.getFullYear();
+        m = n.getMonth() + 1;
+        d = n.getDate();
+        document.getElementById("title").innerHTML = "Trivia Live Scoring - " + m + "/" + d + "/" + y;
+        </script>
         <div><img src = "img/fig1.png"></div>
+        <div>1 person (100%) got question 1-1 correct.</div>
         
         </body>
         </html>
