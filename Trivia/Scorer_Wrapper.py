@@ -16,8 +16,8 @@ if __name__ == "__main__":
     while True:
         if not TYPE:
             Scorer.standings, Scorer.four_q, Scorer.quarter_bonus, Scorer.final_qs, Scorer.teams, Scorer.no_teams, Scorer.repo, Scorer.html_temp = Scorer.setup()
-            Scorer.files = ['Trivia/Live_Tracker.html',
-                           'Trivia/img/fig1.png']
+            Scorer.files = [r'/home/andrew/Documents/aefreeman.github.io/Trivia/Live_Tracker.html',
+                           r'/home/andrew/Documents/aefreeman.github.io/Trivia/img/fig1.png']
             Scorer.scores = [[0] for team in Scorer.teams]
             Scorer.counter = 2
             questions = [['Quarter', i//4+1,i%4+1] for i in range(16)]
