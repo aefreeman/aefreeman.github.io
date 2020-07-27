@@ -63,14 +63,14 @@ def get_stats(TYPE, QTR, QUESTION):
         correct = four_q.col_values(6)[strt:end].count('x')
         return f'{correct} {"people" if correct != 1 else "person"} ({100*correct/no_teams:.0f}%) got question {QTR}-{QUESTION} correct.'
     elif TYPE == "Bonus":
-        correct = list(map(int, quarter_bonus.col_values(2+(QTR-1)*3)[2:]))
+        correct = list(map(float, quarter_bonus.col_values(2+(QTR-1)*3)[2:]))
         return f'The average number of {"points" if QTR == 2 else "correct answers"} was {np.mean(correct):.2f}. The maximum was {np.max(correct)}.'
     else:
         strt = 2+(QUESTION-1)*no_teams
         end = strt+no_teams
         correct = final_qs.col_values(6)[strt:end].count('x')
-        wagers = list(map(int, final_qs.col_values(4)[strt:end]))
-        pts = list(map(int,final_qs.col_values(7)[strt:end]))
+        wagers = list(map(float, final_qs.col_values(4)[strt:end]))
+        pts = list(map(float,final_qs.col_values(7)[strt:end]))
         return f'{correct} {"people" if correct != 1 else "person"} ({100*correct/no_teams:.0f}%) got the previous question correct. The average wager was {np.mean(wagers):.2f}. The average points awarded was {np.mean(pts):.2f}'
 
 def update(TYPE, QTR, QUESTION):
