@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+	    tex2jax: {
+	      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+	      processEscapes: true
+	    }
+	  });
+	</script>
+
+	<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+		<title>Most Important Player</title>
+		<link rel="stylesheet" href="Styles.css">
+	</head>
+	<body>
+<h1>Finding the Real MVP</h1>
+<br>
+<div class = "text">
+	This article sets out to do one thing: determine the most important player in (U.S.) sports. Fair warning: this article won't be one of those nice, well-analyzed post-hoc write-ups done after months of research; no, this article is down-and-dirty, written as the analysis comes to light. The article will be edited so that it logically makes sense and so that my English teacher wouldn't flunk me. That's it. That said, let's dive right in.
+<br>
+</div>
+<div class = "section_head">
+	1. Getting Started
+</div>
+<div class = "text">
+	Who is the most valuable played in sports? A very straightforward question that we probably won't fully answer. But let's try. First, let's try to figure out what would make a player "valuable". Off the top of my head, I can come up with four potential qualifiers:
+	<!-- move this further left !-->
+	<ul>
+		<li>Salary</li>
+		<li>Pure Statistics</li>
+		<li>Added Wins (WAR)</li>
+	</ul>
+	Briefly, salary is exactly what it sounds like: how much some ownership group was willing to pay for a player. This should be the easiest to analyze. Second is stats. This should also be relatively easy to analyze: it's easy for me to say that in 2019, Patrice Bergeron has <a href = "https://www.nhl.com/player/patrice-bergeron-8470638">31 goals</a> compared to Brad Marchand's <a href = "https://www.nhl.com/player/brad-marchand-8473419"> 28</a>. $31>28$, so in goals, Bergeron wins. Determining how much goals are worth relative to assists, penalty minutes, and other statistics becomes more complicated, but the idea itself is simple. Finally, we can look at Wins Against Replacement (WAR), a stat that is designed specifically to answer this question. Basically, the idea is to determnine how much better off a team would be for starting player x at position z over player y. There will be two big issues with using this metric: one, will we be able to identify a WAR-like metric for all of our sports? And two, are they directly comparable? Is a WAR of 4 in the MLB similar to a WAR of 4 in the NBA? Can we just use total games as a scaling factor? These will be the questions we have to answer.
+	<br>
+	Before we delve into the analysis, it's important to set some ground rules. First, I am only looking at players who's primary team is in the United States. This means that even though Ronaldo and Messi are dominant in their sport, they aren't elligible to be crowned Most Important Player (MIP). Further, only currently active players are elligible. Historically, Babe Ruth might have been phenomenal, but I don't think he'd do very well if we put him in a game right now (you know, since he died over 70 years ago). Next, we will limit our analysis to professional sports. <a href = "https://www.sbnation.com/college-basketball/2020/3/24/21186863/college-basketball-players-ranking-obi-toppin-duke-kansas-kentucky">Obi Toppin</a> might set the NBA ablaze next year, but for now he remains inelligible since he plays in the NCAA. Finally, we're limiting our analysis to the following sports: baseball, basketball, football, soccer, and hockey. You're welcome to make a case for e.g. <a href = "https://nylizards.majorleaguelacrosse.com/sports/mens-lacrosse/stats/2020">Connor O'Hara</a> of the MLL's New York Lizards (with 14 goals in just 5 games), and I'd love to see it, but you won't find it in this article. Now, without further ado, let's get to it.<br>
+</div>
+<div class = "section_head">
+	2. Finding Data Sources
+</div>
+<div class = "text">
+	Before we can start comparing players, we need to find data sources for all of the metrics we want to use. For each league we want to analyze, we will need two ket sets of data: a salary database and a statistics database. Further, we should set our years. A precursory look has shown that it is much easier to find current salaries than past salaries, so we will use the most recent numbers. However, I don't want to use any statistics that have been altered by the pandemic. Shortened seasons and extended hiatuses can result in weird trends and analyses, so I will say that I am only using statistics from before the pandemic. In order to make this analysis more even, I will only include sports that completed their regular seasons before the pandemic began. That means that even though the NBA had played upwards of 60 of their 82 games before the pandemic, we will exclude this year. By doing this, we can hone in on the best player under normal circumstances without having to do any interpolation for partially completed seasons. Finally, playoffs will be excluded from this analysis so that every player within a league will have the same number of games played. Now, let's find some data sources. We'll start out by trying to find a men and a women's league for each sport, but we may not have the prerequiesite data for both in a given sport.
+
+	<u>Basketball</u>
+	Men's league: NBA
+	Women's league: WNBA
+
+	NBA:
+		Salaries: https://www.basketball-reference.com/contracts/players.html
+		Stats: https://www.basketball-reference.com/leagues/NBA_2019_totals.html
+	WNBA:
+		Salaries: https://www.spotrac.com/wnba/rankings/
+		Stats: https://www.basketball-reference.com/wnba/years/2019_totals.html
+	<u>Baseball/Softball</u>
+	Men's league: MLB
+	Women's league: NPF
+
+	MLB:
+		Salaries: https://www.spotrac.com/mlb/rankings/
+		Stats: https://www.baseball-reference.com/leagues/MLB/2019-standard-pitching.shtml, https://www.baseball-reference.com/leagues/MLB/2019-standard-batting.shtml,
+		https://www.baseball-reference.com/leagues/MLB/2019-standard-fielding.shtml
+	NPF:
+		Salaries: None
+		Stats: https://profastpitch.com/stats/ (only leaders)
+
+	<u>Football</u>
+	Men's League: NFL
+	Women's League: WFA
+
+	NFL:
+		Salaries: https://www.pro-football-reference.com/players/salary.htm (Note that this is 2019 salaries)
+		Stats: https://www.pro-football-reference.com/years/2019/passing.htm (Note that we are using 2019)
+	WFA:
+		Salaries: None
+		Stats: https://www.hostedsports.com/hsi_stats.asp?league=wfa&season=2019 (Note: Kickers excluded because kicking stats were relatively sparse (2 fg attempts))
+			Also, this is D1 WFA (which is based on divisions).
+
+	<u>Soccer</u>
+	Men's League: MLS
+	Women's League: NWSL
+
+	MLS:
+		Salaries: https://www.thebluetestament.com/2019/9/30/20889779/complete-2019-mls-salaries-major-league-soccer-zlatan-atlanta-sporting-kc-los-angeles-new-york
+		Stats: https://www.mlssoccer.com/stats/season?year=2019&group=shots&sort=desc&order=<STRONG></STRONG>
+	NWSL:
+		Salaries: None
+		Stats: https://www.nwslsoccer.com/stats?sort=g#players
+
+	<u>Hockey</u>
+	Men's League: NHL
+	Women's League: NWHL
+
+	NHL:
+		Salaries: https://www.hockey-reference.com/friv/current_nhl_salaries.cgi
+		Stats: https://www.hockey-reference.com/leagues/NHL_2019_skaters.html
+	NWHL:
+		Salaries: https://www.theicegarden.com/2019/5/21/18632671/2019-2020-nwhl-roster-tracker-season-5-womens-hockey-forthegame-free-agent-signings (mainly undisclosed)
+		Stats: https://www.eliteprospects.com/league/nwhl-w/stats/2018-2019
+
+	Overall, we found statistics for almost every league. The NPF only provides statistics on the top 10 players in a few categories, so we will exclude the league since no real comparisons can be drawn (additionally, we want to standardize our stats against averages which won't be possible with such a small data set). For statistics, we have the 5 men's leagues and the WNBA. THe NWHL has a salary list, but almost all of the values are "undisclosed", so we can't really do anything with that. Having salary information for only 6 leagues isn't ideal, but we'll work with what we have. 
+
+
+
+</div>
+<div class = "section_head">
+	3. Salary
+</div>
+<div class = "text">
+	For salary, there are two measures that should definitively answer the question of "who is most important?". One is raw salary. Dollar for dollar, who is worth the most amount of money? To make the comparison easier, we can just scale it to an annual number. Second, who is <i>relatively</i> most expensive? The NBA pays players an average of <a href = "https://www.stltoday.com/news/the-average-mlb-player-gets-4-4-million-a-year/article_35d2d9a0-e5c8-5fea-88d0-0c00314ae81a.html#:~:text=Major%20League%20Baseball's%20average%20salary,contracts%20by%20The%20Associated%20Press.">\&#36;4.4 million</a> whereas in the MLS, a player gets an average of less than <a href = "https://www.nytimes.com/2020/02/06/sports/soccer/major-league-soccer-reaches-a-deal-with-its-players.html#:~:text=The%20average%20M.L.S.,players%2C%20earned%20less%20than%20%24100%2C000."> &#36;415,000</a>. If we look at how much more a player makes than their peers, it will give us a better idea of their inmportance to their team.
+
+	A note on salary: there are a few metrics that could be considered part of salary, such as guaranteed money and bonuses. For simplicity, we will use a player's annual base salary for the 2019-2020 season. 
+</div>
+	</body>
+</html>
