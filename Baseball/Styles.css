@@ -1,0 +1,146 @@
+body {
+	/*background-color: #deecff;*/
+
+}
+h1 {
+	margin-top: 75px;
+	text-align: center;
+
+}
+h2 {
+  margin-top: 75 px;
+  text-align: center;
+}
+p {
+  color: red;
+}
+div{
+	margin-left: 8%;
+	margin-right: 8%;
+	font: Garamond;
+	font-size: 16px;
+}
+div.section_head{
+	font-weight: bold;
+	font-size: 24px;
+}
+div.abstract{
+
+}
+div.text{
+
+}
+img.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  width: 30%;
+}
+img.bracket{
+	display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+ width: 80%;
+}
+div.list {
+	display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  width: 50%;
+}
+div.caption{
+	display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  width: 50%;
+}
+div.disclaimer{
+	color: grey;
+	font-size: 14px;
+}
+span.ref{
+	position: relative;
+}
+span.refbody {
+   
+    font-size: .9em;
+    line-height: 1.1;
+    display: block;
+    min-width: 20em;
+    position: absolute;
+    left: 25px;
+    bottom: 5px;
+    border: 1px solid;
+    padding: 5px;
+    background-color: #fff;
+    word-wrap: break-word;
+    z-index: 9999;
+    overflow: auto;
+}
+span.refnum {
+	color: blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+div.art {
+	margin-left: -10px;
+	margin-right: -10px;
+	margin-top: -10px;
+	margin-right: -10px;
+	width: 100%;
+
+}
+ul {
+  display: table;
+  margin: 0 auto;
+  padding-top: 10px;
+  padding-bottom: 10px
+}
+ol {
+  display: table;
+  margin: 0 auto;
+  padding-top: 10px;
+  padding-bottom: 10px
+}
+div.inp{
+	
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+  text-align: center;    
+}
+table{
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+iframe.frame{
+	width: 80%;
+	height: 475px;
+	display: block;
+  	margin-left: 10%;
+  	margin-right: 10%;
+  	margin-top: 10px;
+}
+br {
+            display: block; /* makes it have a width */
+            content: ""; /* clears default height */
+            margin-top: 10px; /* change this to whatever height you want it */
+}
+
+ul.left{
+  margin-left: 10%;
+  padding-top: 10px;
+  padding-bottom: 10px
+}
+
+img.tbl{
+  width: 250px;
+}
