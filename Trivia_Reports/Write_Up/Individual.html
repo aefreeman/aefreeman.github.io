@@ -22,6 +22,7 @@
 			function week_change(){
 				var name = document.getElementById("Team").value;
 				var week = document.getElementById("Week").value;
+				week -= 1;
 				var img = document.getElementById("igraph4");
 				img.src = "img/" + name + "_Week_" + week + ".html";
 				var img = document.getElementById("igraph5");
