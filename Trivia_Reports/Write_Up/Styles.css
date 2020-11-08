@@ -7,8 +7,21 @@ h1 {
 	text-align: center;
 
 }
+
+
+div.row {
+  display: flex;
+}
+
+div.column {
+  flex: 50%;
+}
+
+div.column_3 {
+  flex:33%;
+}
 h2 {
-  margin-top: 75 px;
+  margin-top: 50px;
   text-align: center;
 }
 p {
@@ -35,14 +48,7 @@ img.center {
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
-  width: 30%;
-}
-img.center_large {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  width: 90%;
+  width: 50%;
 }
 img.bracket{
 	display: block;
@@ -129,12 +135,12 @@ table{
 	padding-bottom: 5px;
 }
 iframe.frame{
-	width: 80%;
+	width: 10%;
 	height: 475px;
 	display: block;
-  	margin-left: 10%;
-  	margin-right: 10%;
-  	margin-top: 10px;
+  	margin-left: 00%;
+  	margin-right: 00%;
+  	margin-top: 0px;
 }
 br {
             display: block; /* makes it have a width */

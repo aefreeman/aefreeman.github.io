@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Trivia Report - Teams</title>
+		<link rel="stylesheet" href="Styles.css">
+		<script>
+			function team_change(){
+				var name = document.getElementById("Team").value;
+				var img = document.getElementById("igraph1");
+				img.src = "img/" + name + "_Weekly.html";
+				var img = document.getElementById("igraph2");
+				img.src = "img/" + name + "_Butterfly.html";
+				var img = document.getElementById("igraph3");
+				img.src = "img/" + name + "_All_Weeks.html";
+				var img = document.getElementById("igraph4");
+				img.src = "img/" + name + "_Week_1.html";
+				var img = document.getElementById("igraph5");
+				img.src = "img/" + name + "_Week_1_Breakdown.html";
+				var img = document.getElementById("igraph6");
+				img.src = "img/" + name + "_Week_1_Cats.html";
+			}
+			function week_change(){
+				var name = document.getElementById("Team").value;
+				var week = document.getElementById("Week").value;
+				var img = document.getElementById("igraph4");
+				img.src = "img/" + name + "_Week_" + week + ".html";
+				var img = document.getElementById("igraph5");
+				img.src = "img/" + name + "_Week_" + week + "_Breakdown.html";
+				var img = document.getElementById("igraph6");
+				img.src = "img/" + name + "_Week_" + week + "_Cats.html";
+
+			}
+		</script>
+	</head>
+	<body>
+		<h1>Trivia Report</h1>
+		<center>
+			<div class = "text">This page presents team specific information. Select a team from the dropdown below. To get back to the overall page, <a href = "https://aefreeman.github.io/Trivia_Reports/Write_Up/Overall.html/">click here</a>.
+			</div>
+		</center>
+
+		<select name="Team" id="Team" onchange="team_change()">
+			<option value = "Blazin_Asian">Blazin Asian</option>
+		  	<option value = "Fellowship_of_the_Beer">Fellowship of the Beer</option>
+			<option value = "Hottentottententententoonstellin">Hottentottententententoonstellin</option>
+			<option value = "Josh_Allen_is_Elite">Josh Allen is Elite</option>
+			<option value = "Mack_Wickell">Mack Wickell</option>
+			<option value = "QotD">QotD</option>
+			<option value = "Skinny_Legends">Skinny Legends</option>
+			<option value = "Team_Bag-Bo">Team Bag-Bo</option>
+			<option value = "Team_Jax">Team Jax</option>
+			<option value = "Team_MBF">Team MBF</option>
+			<option value = "Team_Matigale">Team Matigale</option>
+			<option value = "Team_Name">Team Name</option>
+</select> 
+<div class="row">
+<div class="column">
+  		<h2>All Weeks</h2>
+  		<iframe id="igraph1" scrolling="no" style="border:none;" seamless="seamless" src="img/Blazin_Asian_Weekly.html" height="525" width="100%"></iframe>
+  	</div>
+  	<div class="column">
+  	<h2>Weeks By Question</h2>
+  	<iframe id="igraph3" scrolling="no" style="border:none;" seamless="seamless" src="img/Blazin_Asian_All_Weeks.html" height="525" width="100%"></iframe>	
+  	</div>
+  	</div>
+  	<div class="row">
+  	<div class ="column">
+  	<h2>Butterfly</h2>
+  		<iframe id="igraph2" scrolling="no" style="border:none;" seamless="seamless" src="img/Blazin_Asian_Butterfly.html" height="525" width="100%"></iframe>
+
+  	</div>
+	</div>
+	<h2>Weekly Stats</h2>
+	Select a week: 
+	<select name="Week" id="Week" onchange="week_change()">
+		<option value = "1">Week 1</option>
+		<option value = "2">Week 2</option>
+		<option value = "3">Week 3</option>
+		<option value = "4">Week 4</option>
+		<option value = "5">Week 5</option>
+	</select>
+	<div class = "row">
+		<div class = "column">
+			<h2>Week Score</h2>
+			<iframe id="igraph4" scrolling="no" style="border:none;" seamless="seamless" src="img/Blazin_Asian_Week_1.html" height="525" width="100%"></iframe>
+		</div>
+		<div class = "column">
+			<h2>Points</h2>
+			<iframe id="igraph5" scrolling="no" style="border:none;" seamless="seamless" src="img/Blazin_Asian_Week_1_Breakdown.html" height="525" width="100%"></iframe>
+		</div>
+	</div>
+	<div class = "row">
+		<div class = "column">
+			<h2>Categories</h2>
+			<iframe id="igraph6" scrolling="no" style="border:none;" seamless="seamless" src="img/Blazin_Asian_Week_1_Cats.html" height="525" width="100%"></iframe>
+		</div>
+	</div>
+	</body>
+</html>

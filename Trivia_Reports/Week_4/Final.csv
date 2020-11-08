@@ -1,0 +1,17 @@
+Question,Timestamp,Team,Wager,Answer,Correct (x),Points
+1-1,10/18/2020 20:03:27,Mack Wickell,2,Tank,,-1
+1-1,10/18/2020 20:03:48,Skinny Legends,10,train,x,10
+1-1,10/18/2020 20:04:00,Team MBF,4,Mercedes,,-2
+1-1,10/18/2020 20:04:01,Fellowship of the Beer,2,Tank,,-1
+1-1,10/18/2020 20:04:04,Team Matigale,10,submarine,,-5
+1-1,10/18/2020 20:04:15,Josh Allen is Elite,2,tank,,-1
+1-1,10/18/2020 20:04:18,Team Bag-Bo,2,Model A ford car,,-1
+1-1,10/18/2020 20:04:30,Team Jax,2,train,x,2
+1-2,10/18/2020 20:07:44,Team Jax,10,"January 1,1970",x,10
+1-2,10/18/2020 20:08:27,Skinny Legends,10,Jan 1 1970,x,10
+1-2,10/18/2020 20:08:52,Mack Wickell,2,"January 1, 1977",,-1
+1-2,10/18/2020 20:09:09,Team Bag-Bo,2,1960,,-1
+1-2,10/18/2020 20:09:28,Team MBF,2,3000,,-1
+1-2,10/18/2020 20:09:35,Josh Allen is Elite,2,1986,,-1
+1-2,10/18/2020 20:09:37,Fellowship of the Beer,2,00/00/0000 00:00:00.0000,,-1
+1-2,10/18/2020 20:10:05,Team Matigale,10,"Dec 31, 1999",,-5

@@ -1,0 +1,17 @@
+Question,Timestamp,Team,Wager,Answer,Correct (x),Points
+1-1,44101.697,Josh Allen is Elite,2,nope,,-1
+1-1,44101.6971,Team Name,4,puma,x,4
+1-1,44101.69711,Fellowship of the Beer,4,Puma,x,4
+1-1,44101.69724,Team Jax,10,Puma,x,10
+1-1,44101.69753,Team MBF,4,Reebok,,-2
+1-1,44101.69759,Team Bag-Bo,2,puma,x,2
+1-1,44101.69761,Blazin Asian,2,Nike,,-1
+1-1,44101.69928,Skinny Legends,8,puma,x,8
+1-2,44101.70064,Team Bag-Bo,2,austin,,-1
+1-2,44101.70068,Team Name,2,phoenix az,x,2
+1-2,44101.70078,Josh Allen is Elite,2,"Austin, TX",,-1
+1-2,44101.70078,Team Jax,10,Atlanta,,-5
+1-2,44101.70134,Fellowship of the Beer,6,Houston,,-3
+1-2,44101.70162,Skinny Legends,5,austin,,-2.5
+1-2,44101.70164,Blazin Asian,2,Atlanta,,-1
+1-2,44101.70223,Team MBF,6,Sacramento ,,-3
