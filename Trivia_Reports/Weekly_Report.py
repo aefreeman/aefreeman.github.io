@@ -331,9 +331,9 @@ class Trivia:
                     domain = [0.45, 0.55],
                     visible = False
                 ),
-                yaxis2 = dict(range = [-2,20],
+                yaxis2 = dict(range = [-2,22],
                               visible = False),
-                yaxis3 = dict(range = [-2,20],
+                yaxis3 = dict(range = [-2,22],
                               visible = False)
             )
             self.team_season[team].Butterfly = fig
