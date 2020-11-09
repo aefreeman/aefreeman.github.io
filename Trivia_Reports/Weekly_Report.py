@@ -309,8 +309,9 @@ class Trivia:
             butter_color = f'hsl({butter_color_template[0]},{butter_color_template[1]},{butter_color_template[2]})'
             a['team_text'] = a.apply(lambda x: f'Correct: {int(x.Answered_Correctly_Team)}/{int(x.Answered_Team)} <br>Points: {x.Points_Earned_Team}/{x.Points_Wagered_Team}', axis =1)
             a['total_text'] = a.apply(lambda x: f'Correct: {int(x.Answered_Correctly_Total)}/{int(x.Answered_Total)} <br>Points: {x.Points_Earned_Total}/{x.Points_Wagered_Total}', axis =1)
-            data.append(go.Bar(name = team, y=[i for i in range(len(a.Answered_Percent_Team))],x=a.Answered_Percent_Team, orientation = 'h', marker_color = butter_color, hovertext = a.team_text, hoverinfo = 'text', text = [f'{x:.0f}%' for x in a.Answered_Percent_Team], textposition = 'auto'))
-            data.append(go.Bar(name = 'Total', y=[i for i in range(len(a.Answered_Percent_Team))],x=a.Answered_Percent_Total, orientation = 'h', xaxis = 'x2', yaxis = 'y2', marker_color = 'darkgrey',hovertext = a.total_text, hoverinfo = 'text', text = [f'{x:.0f}%' for x in a.Answered_Percent_Total], textposition = 'auto'))
+            self.team_season[team].tmp = a.Answered_Percent_Team
+            data.append(go.Bar(name = team, y=[i for i in range(len(a.Answered_Percent_Team))],x=a.Answered_Percent_Team, orientation = 'h', marker_color = butter_color, hovertext = a.team_text, hoverinfo = 'text', text = [f'{100*x:.0f}%' for x in a.Answered_Percent_Team], textposition = 'auto'))
+            data.append(go.Bar(name = 'Total', y=[i for i in range(len(a.Answered_Percent_Team))],x=a.Answered_Percent_Total, orientation = 'h', xaxis = 'x2', yaxis = 'y2', marker_color = 'darkgrey',hovertext = a.total_text, hoverinfo = 'text', text = [f'{100*x:.0f}%' for x in a.Answered_Percent_Total], textposition = 'auto'))
             data.append(go.Scatter(x = [1 for i in range(len(a.Points_Percent_Team))], y = [i for i in range(len(a.Points_Percent_Team))], orientation = 'h', mode = 'text', text = list(a.index),xaxis = 'x3', yaxis = 'y3', hoverinfo = None, showlegend=False))
             fig = go.Figure(data = data, layout = go.Layout())
             fig.update_layout(
