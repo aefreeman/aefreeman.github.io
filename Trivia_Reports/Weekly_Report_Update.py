@@ -166,33 +166,33 @@ def make_cats_team(trivia, team):
     
     #plot(fig)
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
-    file_name = f"Write_Up/img/{team.replace(' ', '_')}_Cats.html"
+    file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_Cats.html"
     fig.write_html(file_name)
 
 def make_butterfly(trivia, team):
     fig = trivia.team_season[team].Butterfly
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
-    file_name = f"Write_Up/img/{team.replace(' ', '_')}_Butterfly.html"
+    file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_Butterfly.html"
     fig.write_html(file_name)
 
 def make_season_plots(trivia, team):
     fig = trivia.team_season[team].weekly_plots
     fig.update_layout(xaxis_title = "Week", yaxis_title= "Score")
-    file_name = f"Write_Up/img/{team.replace(' ', '_')}_Weekly.html"
+    file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_Weekly.html"
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
     fig.write_html(file_name)
 
 def make_season_all(trivia, team):
     fig = trivia.team_season[team].weekly_clean
     fig.update_layout(xaxis_title = "Question", yaxis_title= "Score")
-    file_name = f"Write_Up/img/{team.replace(' ', '_')}_All_Weeks.html"
+    file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_All_Weeks.html"
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
     fig.write_html(file_name)
 
 def make_week_score(trivia, team, week):
     fig = trivia.team_weeks[team][week][1].running_plot
     fig.update_layout(xaxis_title = "Question", yaxis_title= "Score")
-    file_name = f"Write_Up/img/{team.replace(' ', '_')}_Week_{week}.html"
+    file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_Week_{week}.html"
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
     fig.write_html(file_name)
 
@@ -229,7 +229,7 @@ def make_week_cat(trivia, team, week):
     
     #plot(fig)
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
-    file_name = f"Write_Up/img/{team.replace(' ', '_')}_Week_{week}_Cats.html"
+    file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_Week_{week}_Cats.html"
     fig.write_html(file_name)
 
 def make_running_table(trivia, team, week):
@@ -268,7 +268,7 @@ def make_running_table(trivia, team, week):
     fig = go.Figure(data = [go.Table(
             header=header, cells=cells)])
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
-    file_name = f"Write_Up/img/{team.replace(' ', '_')}_Week_{week}_Breakdown.html"
+    file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_Week_{week}_Breakdown.html"
     fig.write_html(file_name)
     
 s_col = Color("#fa8575")
