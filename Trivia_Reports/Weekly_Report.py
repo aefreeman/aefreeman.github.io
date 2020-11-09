@@ -314,13 +314,14 @@ class Trivia:
             data.append(go.Bar(name = 'Total', y=[i for i in range(len(a.Answered_Percent_Team))],x=a.Answered_Percent_Total, orientation = 'h', xaxis = 'x2', yaxis = 'y2', marker_color = 'darkgrey',hovertext = a.total_text, hoverinfo = 'text', text = [f'{100*x:.0f}%' for x in a.Answered_Percent_Total], textposition = 'auto'))
             data.append(go.Scatter(x = [1 for i in range(len(a.Points_Percent_Team))], y = [i for i in range(len(a.Points_Percent_Team))], orientation = 'h', mode = 'text', text = list(a.index),xaxis = 'x3', yaxis = 'y3', hoverinfo = None, showlegend=False))
             fig = go.Figure(data = data, layout = go.Layout())
+            numb_cats = len(a.index)
             fig.update_layout(
                 xaxis=dict(
                     domain=[0, 0.45],
                     range = [1.02,0],
                 ),
                 yaxis=dict(
-                    range = [-2,22],
+                    range = [-2,2+numb_cats],
                     visible = False
                 ),
                 xaxis2=dict(
@@ -331,9 +332,9 @@ class Trivia:
                     domain = [0.45, 0.55],
                     visible = False
                 ),
-                yaxis2 = dict(range = [-2,22],
+                yaxis2 = dict(range = [-2,2+numb_cats],
                               visible = False),
-                yaxis3 = dict(range = [-2,22],
+                yaxis3 = dict(range = [-2,2+numb_cats],
                               visible = False)
             )
             self.team_season[team].Butterfly = fig
