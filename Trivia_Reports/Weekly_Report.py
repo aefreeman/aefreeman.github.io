@@ -320,7 +320,7 @@ class Trivia:
                     range = [1.02,0],
                 ),
                 yaxis=dict(
-                    range = [-2,20],
+                    range = [-2,22],
                     visible = False
                 ),
                 xaxis2=dict(
