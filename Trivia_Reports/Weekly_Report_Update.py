@@ -13,7 +13,7 @@ import numpy as np
 from colour import Color
 
 
-weeks = [1,2,3,4,5]
+weeks = [1,2,3,4,5,6]
 trivia = Trivia(weeks)
 
 def color_split(x, dark=0):
@@ -35,9 +35,11 @@ def make_standings_table(trivia):
                    line_color='darkslategray')
     data = data.reindex(["Team", "Total"] + [f"Week_{x}" for x in range(1,11)] + ['highlights'], axis=1)
     data = data.round(2)
-    fill_col=trivia.colors.Color.apply(lambda x: color_split(x)).tolist()
-    fill_col_dark=trivia.colors.Color.apply(lambda x: color_split(x,dark=1)).tolist()
-    fill_col_darker=trivia.colors.Color.apply(lambda x: color_split(x,dark=1.5)).tolist()
+    data.reset_index(inplace=True, drop=True)
+    fill_df = data.merge(trivia.colors, how = 'left', on = 'Team')
+    fill_col=fill_df.Color.apply(lambda x: color_split(x)).tolist()
+    fill_col_dark=fill_df.Color.apply(lambda x: color_split(x,dark=1)).tolist()
+    fill_col_darker=fill_df.Color.apply(lambda x: color_split(x,dark=1.5)).tolist()
     fill_col = list(zip(fill_col, fill_col_dark, fill_col_darker))
     fill_color = []
     scores = data.loc[:, ~data.columns.isin(['Total', 'Team', 'highlights'])].values.tolist()
@@ -46,9 +48,9 @@ def make_standings_table(trivia):
         fill_color.extend(fill_tmp)
     fill_color = [fill_color[x::12] for x in range(12)]
     fonts = ['black' for i in range(12*len(data.Team))]
-    white = [data.Team.tolist().index('Fellowship of the Beer'), data.Team.tolist().index('QotD')]
+    white = [data.Team.tolist().index('Team MBF'), data.Team.tolist().index('Team Name')]
     for c in white:
-        fonts[12*c:12*c+12] = ['white' for i in range(len(data.Team))]
+        fonts[12*c:12*c+12] = ['white' for i in range((12))]
     fonts= [fonts[x::12] for x in range(12)]
     cells = dict(values = data.loc[:, data.columns != 'highlights'].T.values,
                   line_color='darkslategray',
