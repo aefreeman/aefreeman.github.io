@@ -13,8 +13,6 @@ import numpy as np
 from colour import Color
 
 
-weeks = [1,2,3,4,5,6]
-trivia = Trivia(weeks)
 
 def color_split(x, dark=0):
     x = x.split(',')
@@ -270,6 +268,9 @@ def make_running_table(trivia, team, week):
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
     file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_Week_{week}_Breakdown.html"
     fig.write_html(file_name)
+
+weeks = [1,2,3,4,5,6,7]
+trivia = Trivia(weeks)
     
 s_col = Color("#fa8575")
 colors = list(s_col.range_to(Color("#009c50"),10))
