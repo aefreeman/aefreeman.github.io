@@ -187,15 +187,15 @@ def make_season_all(trivia, team):
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
     fig.write_html(file_name)
 
-def make_week_score(trivia, team, week):
-    fig = trivia.team_weeks[team][week][1].running_plot
+def make_week_score(trivia, team, i, week):
+    fig = trivia.team_weeks[team][i][1].running_plot
     fig.update_layout(xaxis_title = "Question", yaxis_title= "Score")
     file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_Week_{week}.html"
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
     fig.write_html(file_name)
 
-def make_week_cat(trivia, team, week):
-    df = trivia.team_weeks[team][week][1].cats_df
+def make_week_cat(trivia, team, i, week):
+    df = trivia.team_weeks[team][i][1].cats_df
     df.index = df.index.set_names(['Category'])
     try:
         df.reset_index(inplace=True)
@@ -230,8 +230,8 @@ def make_week_cat(trivia, team, week):
     file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_Week_{week}_Cats.html"
     fig.write_html(file_name)
 
-def make_running_table(trivia, team, week):
-    data = trivia.team_weeks[team][week][1]
+def make_running_table(trivia, team, i, week):
+    data = trivia.team_weeks[team][i][1]
     bonus_q1_total = data.total_q1
     bonus_q3_total = data.total_q3
     bonus_funny = data.total_bonus
@@ -290,6 +290,6 @@ for team in teams:
     ##        make_cats_team(trivia, team)
     for i, week in enumerate(team_weeks):
         print(f'.....Week {week}')
-        make_week_score(trivia, team, i)
-        make_week_cat(trivia, team, i)
-        make_running_table(trivia, team, i)
+        make_week_score(trivia, team, i, week)
+        make_week_cat(trivia, team, i, week)
+        make_running_table(trivia, team, i, week)
