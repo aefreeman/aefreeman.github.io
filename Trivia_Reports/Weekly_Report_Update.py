@@ -269,7 +269,7 @@ def make_running_table(trivia, team, i, week):
     file_name = f"Write_Up/img/{team.replace(' ', '_').replace(',','')}_Week_{week}_Breakdown.html"
     fig.write_html(file_name)
 
-weeks = [1,2,3,4,5,6,7]
+weeks = [1,2,3,4,5,6,7,8]
 trivia = Trivia(weeks)
     
 s_col = Color("#fa8575")
