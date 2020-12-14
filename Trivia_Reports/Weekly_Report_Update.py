@@ -285,7 +285,7 @@ for team in teams:
     print('.....Overall')
     team_weeks = [x[0] for x in trivia.team_weeks[team]]
     make_butterfly(trivia, team)
-    make_season_plots(trivia, team)
+    make_season_plots(trivia, team) 
     make_season_all(trivia, team)
     ##        make_cats_team(trivia, team)
     for i, week in enumerate(team_weeks):
