@@ -114,8 +114,11 @@ class Trivia_Team:
     def get_plots(self):
         self.running_score = self.df.loc[self.df.Question.str[0]=='1'].Points_Earned.cumsum().tolist()
         self.running_score.append(self.df_q.Q1_Correct.values[0]*2+self.running_score[-1])
-        tmp = self.running_score[-1]
-        self.running_score.extend([tmp + x for x in self.df.loc[self.df.Question.str[0]=='2'].Points_Earned.cumsum().tolist()])
+        self.q_1_total = self.running_score[-1]
+        self.q_2_total = self.df.loc[self.df.Question.str[0]=='2'].Points_Earned.sum()
+        self.q_3_total = self.df.loc[self.df.Question.str[0]=='3'].Points_Earned.sum()
+        self.q_4_total = self.df.loc[self.df.Question.str[0]=='4'].Points_Earned.sum()
+        self.running_score.extend([self.q_1_total + x for x in self.df.loc[self.df.Question.str[0]=='2'].Points_Earned.cumsum().tolist()])
         self.running_score.append(self.df_h.Points.sum()+self.running_score[-1]+self.total_bonus)
         tmp = self.running_score[-1]
         self.running_score.extend([tmp + x for x in self.df.loc[self.df.Question.str[0]=='3'].Points_Earned.cumsum().tolist()])
@@ -244,6 +247,14 @@ class Season_Total:
         
 class Trivia:
     def __init__(self, weeks, Colors_CSV = 'Teams.csv'):
+        self.q_1 = []
+        self.q_2 = []
+        self.q_3 = []
+        self.q_4 = []
+        self.b_1 =[]
+        self.b_2 = []
+        self.b_3 = []
+        self.f = []
         self.weeks = weeks
         self.colors = pd.read_csv(Colors_CSV)
         self.teams = self.colors.Team.tolist()
@@ -251,7 +262,7 @@ class Trivia:
         self.overall_weeks = {}
         self.team_season = {}
         self.get_data()
-        
+
         #self.season_overall
         #self.season_standings
         #self.cats_df
@@ -277,6 +288,14 @@ class Trivia:
                  df_h.loc[df_h.Team == team],
                  df_q.loc[df_q.Team == team],
                  cats, week, color)
+                self.b_1.append(tm.total_q1)
+                self.b_3.append(tm.total_q3)
+                self.b_2.append(tm.total_h)
+                self.f.append(tm.total_f)
+                self.q_1.append(tm.q_1_total)
+                self.q_2.append(tm.q_2_total)
+                self.q_3.append(tm.q_3_total)
+                self.q_4.append(tm.q_4_total)
                 if not team in self.team_weeks.keys():
                     self.team_weeks[team] = [[week,tm]]
                 else:
